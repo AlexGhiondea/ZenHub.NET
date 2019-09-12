@@ -126,6 +126,24 @@ namespace ZenHub
             return await AddIssueToEpic(epic.Repository.Id, epic.Number, issue.Repository.Id, issue.Number);
         }
 
+        public async Task<dynamic> AddOrRemoveIssueToEpic(Issue epic, IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove)
+        {
+            var contentBody = new
+            {
+                add_issues = issuesToAdd.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Id }).ToArray(),
+                remove_issues = issuesToRemove.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Id }).ToArray()
+            };
+
+            return await MakeRequestAsync(RequestMethod.Patch, $"{EndPoint}/p1/repositories/{epic.Repository.Id}/epics/{epic.Number}/update_issues", JsonConvert.SerializeObject(contentBody));
+        }
+
+
+        // to add:
+        // - move issue between pipelines
+        // - move in the old way
+        // - convert epic to issue
+        // - convert issue to epic
+
         public async Task<dynamic> GetWorkspaces(Repository repository)
         {
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p2/repositories/{repository.Id}/workspaces");
