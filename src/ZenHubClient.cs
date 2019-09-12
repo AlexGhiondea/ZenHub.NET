@@ -1,5 +1,7 @@
+using Azure.Core.Http;
 using Azure.Core.Pipeline;
 using Newtonsoft.Json;
+using Octokit;
 using System;
 using System.IO;
 using System.Text;
@@ -52,9 +54,19 @@ namespace ZenHub
             return await MakeRequestAsync(RequestMethod.Get,  $"{EndPoint}/p1/repositories/{repoId}/issues/{issueNumber}");
         }
 
+        public async Task<dynamic> GetIssueDataAsync(Issue issue)
+        {
+            return await GetIssueDataAsync(issue.Repository.Id, issue.Number);
+        }
+
         public async Task<dynamic> GetIssueEventsAsync(long repoId, int issueNumber)
         {
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repoId}/issues/{issueNumber}/events");
+        }
+
+        public async Task<dynamic> GetIssueEventsAsync(Issue issue)
+        {
+            return await GetIssueEventsAsync(issue.Repository.Id, issue.Number);
         }
 
         public async Task<dynamic> GetEpicsAsync(long repoId)
@@ -62,9 +74,19 @@ namespace ZenHub
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repoId}/epics");
         }
 
+        public async Task<dynamic> GetEpicsAsync(Repository repository)
+        {
+            return await GetEpicsAsync(repository.Id);
+        }
+
         public async Task<dynamic> GetEpicDataAsync(long repoId, int epicId)
         {
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repoId}/epics/{epicId}");
+        }
+
+        public async Task<dynamic> GetEpicDataAsync(Issue epic)
+        {
+            return await GetEpicDataAsync(epic.Repository.Id, epic.Number);
         }
 
         public async Task<bool> SetEstimateAsync(long repoId, int issueNumber, int estimate)
@@ -79,6 +101,11 @@ namespace ZenHub
             return true;
         }
 
+        public async Task<bool> SetEstimateAsync(Issue issue, int estimate)
+        {
+            return await SetEstimateAsync(issue.Repository.Id, issue.Number, estimate);
+        }
+
         public async Task<dynamic> AddIssueToEpic(long repoId, int issueNumber, long repoIdToAdd, int issueNumberToAdd)
         {
             // This limits the list of issues added to 1.
@@ -89,6 +116,48 @@ namespace ZenHub
             };
 
             return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repoId}/epics/{issueNumber}/update_issues", JsonConvert.SerializeObject(contentBody));
+        }
+
+        public async Task<dynamic> AddIssueToEpic(Issue epic, Issue issue)
+        {
+            return await AddIssueToEpic(epic.Repository.Id, epic.Number, issue.Repository.Id, issue.Number);
+        }
+
+        public async Task<dynamic> GetWorkspaces(Repository repository)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p2/repositories/{repository.Id}/workspaces");
+        }
+
+        public async Task<dynamic> GetZenHubBoard(Repository repository, string WorkspaceId)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p2/workspaces/{WorkspaceId}/repositories/{repository.Id}/board");
+        }
+
+        public async Task<dynamic> GetOldestZenHubBoard(Repository repository)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repository.Id}/board");
+        }
+
+        public async Task<dynamic> GetMilestoneStart(Repository repository, int milestoneNumber)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repository.Id}/milestones/{milestoneNumber}/start_date");
+        }
+
+        public async Task<bool> SetMilestoneStart(Repository repository, Milestone milestone, DateTime startDate)
+        {
+            var contentBody = new
+            {
+                start_date = startDate.ToUniversalTime()
+            };
+
+            var result = await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repository.Id}/milestones/{milestone.Number}/start_date", JsonConvert.SerializeObject(contentBody));
+
+            return true;
+        }
+
+        public async Task<dynamic> GetDependencies(Repository reposity)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{reposity.Id}/dependencies");
         }
     }
 }
