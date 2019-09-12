@@ -3,7 +3,10 @@ using Azure.Core.Pipeline;
 using Newtonsoft.Json;
 using Octokit;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,8 +53,8 @@ namespace ZenHub
         }
 
         public async Task<dynamic> GetIssueDataAsync(long repoId, int issueNumber)
-        { 
-            return await MakeRequestAsync(RequestMethod.Get,  $"{EndPoint}/p1/repositories/{repoId}/issues/{issueNumber}");
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repoId}/issues/{issueNumber}");
         }
 
         public async Task<dynamic> GetIssueDataAsync(Issue issue)
@@ -159,5 +162,114 @@ namespace ZenHub
         {
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{reposity.Id}/dependencies");
         }
+
+        public async Task<dynamic> CreateDependency(Issue blockingIssue, Issue blockedIssue)
+        {
+            var contentBody = new
+            {
+                blocking = new
+                {
+                    repo_id = blockingIssue.Repository.Id,
+                    issue_number = blockingIssue.Number
+                },
+                blocked = new
+                {
+                    repo_id = blockedIssue.Repository.Id,
+                    issue_number = blockedIssue.Number
+                }
+            };
+
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/dependencies", JsonConvert.SerializeObject(contentBody));
+        }
+
+        public async Task<dynamic> DeleteDependency(Issue blockingIssue, Issue blockedIssue)
+        {
+            var contentBody = new
+            {
+                blocking = new
+                {
+                    repo_id = blockingIssue.Repository.Id,
+                    issue_number = blockingIssue.Number
+                },
+                blocked = new
+                {
+                    repo_id = blockedIssue.Repository.Id,
+                    issue_number = blockedIssue.Number
+                }
+            };
+
+            return await MakeRequestAsync(RequestMethod.Delete, $"{EndPoint}/p1/dependencies", JsonConvert.SerializeObject(contentBody));
+        }
+
+
+        public async Task<dynamic> CreateReleaseReport(Repository repository, string Title, string Description, DateTime startDate, DateTime endDate, IEnumerable<Repository> repositoriesInTheReport)
+        {
+            long[] repos = repositoriesInTheReport.Select(x => x.Id).ToArray();
+
+            var contentBody = new
+            {
+                title = Title,
+                description = Description,
+                start_date = startDate.ToUniversalTime(),
+                desired_end_date = endDate.ToUniversalTime(),
+                repositories = repos
+
+            };
+
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repository.Id}/reports/release", JsonConvert.SerializeObject(contentBody));
+        }
+
+
+        public async Task<dynamic> GetReleaseReport(string zenHubReleaseId)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/reports/release/{zenHubReleaseId}");
+        }
+
+        public async Task<dynamic> GetReleaseReports(Repository repository)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repository.Id}/reports/releases");
+        }
+
+        public async Task<dynamic> EditReleaseReport(string ZenHubReleaseId, string Title, string Description, DateTime StartDate, DateTime EndDate, string State)
+        {
+            var contentBody = new
+            {
+                title = Title,
+                description = Description,
+                start_date = StartDate.ToUniversalTime(),
+                desired_end_date = EndDate.ToUniversalTime(),
+                state = State
+            };
+
+            return await MakeRequestAsync(RequestMethod.Patch, $"{EndPoint}/p1/reports/release/{ZenHubReleaseId}", JsonConvert.SerializeObject(contentBody));
+        }
+
+        public async Task<dynamic> AddRepositoryToReleaseReport(string ZenHubReleaseId, Repository repositoryToAdd)
+        {
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/reports/release/{ZenHubReleaseId}/repository/{repositoryToAdd.Id}");
+        }
+
+        public async Task<dynamic> RemoveRepositoryFromReleaseReport(string ZenHubReleaseId, Repository repositoryToRemove)
+        {
+            return await MakeRequestAsync(RequestMethod.Delete, $"{EndPoint}/p1/reports/release/{ZenHubReleaseId}/repository/{repositoryToRemove.Id}");
+        }
+
+        public async Task<dynamic> GetAllIssuesInReleaseReport(string ZenHubReleaseId)
+        {
+            return await MakeRequestAsync(RequestMethod.Get, $"/p1/reports/release/{ZenHubReleaseId}/issues");
+        }
+
+        public async Task<dynamic> ChangeIssuesToReleaseReport(string ZenHubReleaseId, IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove)
+        {
+            var contentBody = new
+            {
+                add_issues = issuesToAdd.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Id }).ToArray(),
+                remove_issues = issuesToRemove.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Id }).ToArray()
+            };
+
+            return await MakeRequestAsync(RequestMethod.Patch, $"{EndPoint}/p1/reports/release/{ZenHubReleaseId}/issues", JsonConvert.SerializeObject(contentBody));
+        }
+
     }
 }
+
