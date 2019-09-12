@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,26 +32,6 @@ namespace ZenHub
             _pipeline = HttpPipelineBuilder.Build(clientOptions, new ZenHubAuthenticationPolicy(authToken), new ThrowOnErrorStatusPolicy());
         }
 
-        private async Task<dynamic> MakeRequestAsync(RequestMethod method, string endpoint, string jsonBody = "")
-        {
-            var request = _pipeline.CreateRequest();
-            request.Method = method;
-            request.UriBuilder.Uri = new Uri(endpoint);
-
-            if (!string.IsNullOrEmpty(jsonBody))
-            {
-                request.Content = HttpPipelineRequestContent.Create(Encoding.UTF8.GetBytes(jsonBody));
-            }
-
-            var response = await _pipeline.SendRequestAsync(request, CancellationToken.None).ConfigureAwait(false);
-
-            // read the content from the stream
-            // The policy will throw if we received an invalid response
-            using (StreamReader sr = new StreamReader(response.ContentStream))
-            {
-                return JsonConvert.DeserializeObject<dynamic>(await sr.ReadToEndAsync());
-            }
-        }
 
         public async Task<dynamic> GetIssueDataAsync(long repoId, int issueNumber)
         {
@@ -92,38 +73,29 @@ namespace ZenHub
             return await GetEpicDataAsync(epic.Repository.Id, epic.Number);
         }
 
-        public async Task<bool> SetEstimateAsync(long repoId, int issueNumber, int estimate)
+        public async Task<dynamic> SetEstimateAsync(long repoId, int issueNumber, int estimate)
         {
             var contentBody = new
             {
-                estimate
+                estimate = estimate
             };
 
-            var result = await MakeRequestAsync(RequestMethod.Put, $"{EndPoint}/p1/repositories/{repoId}/issues/{issueNumber}/estimate", JsonConvert.SerializeObject(contentBody));
-
-            return true;
+            return await MakeRequestAsync(RequestMethod.Put, $"{EndPoint}/p1/repositories/{repoId}/issues/{issueNumber}/estimate", JsonConvert.SerializeObject(contentBody));
         }
 
-        public async Task<bool> SetEstimateAsync(Issue issue, int estimate)
+        public async Task<dynamic> SetEstimateAsync(Issue issue, int estimate)
         {
-            return await SetEstimateAsync(issue.Repository.Id, issue.Number, estimate);
-        }
-
-        public async Task<dynamic> AddIssueToEpic(long repoId, int issueNumber, long repoIdToAdd, int issueNumberToAdd)
-        {
-            // This limits the list of issues added to 1.
             var contentBody = new
             {
-                remove_issues = new object[0],
-                add_issues = new object[1] { new { repo_id = repoIdToAdd, issue_number = issueNumberToAdd } }
+                estimate = estimate
             };
 
-            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repoId}/epics/{issueNumber}/update_issues", JsonConvert.SerializeObject(contentBody));
+            return await MakeRequestAsync(RequestMethod.Put, $"{EndPoint}/p1/repositories/{issue.Repository.Id}/issues/{issue.Number}/estimate", JsonConvert.SerializeObject(contentBody));
         }
 
-        public async Task<dynamic> AddIssueToEpic(Issue epic, Issue issue)
+        public async Task<dynamic> AddIssueToEpic(Issue issue, Issue epic)
         {
-            return await AddIssueToEpic(epic.Repository.Id, epic.Number, issue.Repository.Id, issue.Number);
+            return await AddOrRemoveIssueToEpic(epic, new List<Issue>() { issue }, Enumerable.Empty<Issue>());
         }
 
         public async Task<dynamic> AddOrRemoveIssueToEpic(Issue epic, IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove)
@@ -137,21 +109,46 @@ namespace ZenHub
             return await MakeRequestAsync(RequestMethod.Patch, $"{EndPoint}/p1/repositories/{epic.Repository.Id}/epics/{epic.Number}/update_issues", JsonConvert.SerializeObject(contentBody));
         }
 
+        public async Task<dynamic> MoveIssueToPipeline(Issue issue, string ZenHubWorkspaceId, string PipelineId, int position)
+        {
+            var contentBody = new
+            {
+                pipeline_id = PipelineId,
+                position = position
+            };
 
-        // to add:
-        // - move issue between pipelines
-        // - move in the old way
-        // - convert epic to issue
-        // - convert issue to epic
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{issue.Repository.Id}/issues/{issue.Number}/moves", JsonConvert.SerializeObject(contentBody));
+        }
+
+        public async Task<dynamic> MoveIssueToPipelineOldestWorkspace(Issue issue, string PipelineId, int position)
+        {
+            var contentBody = new
+            {
+                pipeline_id = PipelineId,
+                position = position
+            };
+
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{issue.Repository.Id}/issues/{issue.Number}/moves", JsonConvert.SerializeObject(contentBody));
+        }
+
+        public async Task<dynamic> ConvertEpicToIssue(Issue epic)
+        {
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{epic.Repository.Id}/epics/{epic.Number}/convert_to_issue");
+        }
+
+        public async Task<dynamic> ConvertIssueToEpic(Issue issue)
+        {
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{issue.Repository.Id}/epics/{issue.Number}/convert_to_epic");
+        }
 
         public async Task<dynamic> GetWorkspaces(Repository repository)
         {
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p2/repositories/{repository.Id}/workspaces");
         }
 
-        public async Task<dynamic> GetZenHubBoard(Repository repository, string WorkspaceId)
+        public async Task<dynamic> GetZenHubBoard(Repository repository, string ZenHubWorkspaceId)
         {
-            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p2/workspaces/{WorkspaceId}/repositories/{repository.Id}/board");
+            return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{repository.Id}/board");
         }
 
         public async Task<dynamic> GetOldestZenHubBoard(Repository repository)
@@ -164,16 +161,14 @@ namespace ZenHub
             return await MakeRequestAsync(RequestMethod.Get, $"{EndPoint}/p1/repositories/{repository.Id}/milestones/{milestoneNumber}/start_date");
         }
 
-        public async Task<bool> SetMilestoneStart(Repository repository, Milestone milestone, DateTime startDate)
+        public async Task<dynamic> SetMilestoneStart(Repository repository, Milestone milestone, DateTime startDate)
         {
             var contentBody = new
             {
                 start_date = startDate.ToUniversalTime()
             };
 
-            var result = await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repository.Id}/milestones/{milestone.Number}/start_date", JsonConvert.SerializeObject(contentBody));
-
-            return true;
+            return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repository.Id}/milestones/{milestone.Number}/start_date", JsonConvert.SerializeObject(contentBody));
         }
 
         public async Task<dynamic> GetDependencies(Repository reposity)
@@ -219,7 +214,6 @@ namespace ZenHub
             return await MakeRequestAsync(RequestMethod.Delete, $"{EndPoint}/p1/dependencies", JsonConvert.SerializeObject(contentBody));
         }
 
-
         public async Task<dynamic> CreateReleaseReport(Repository repository, string Title, string Description, DateTime startDate, DateTime endDate, IEnumerable<Repository> repositoriesInTheReport)
         {
             long[] repos = repositoriesInTheReport.Select(x => x.Id).ToArray();
@@ -236,7 +230,6 @@ namespace ZenHub
 
             return await MakeRequestAsync(RequestMethod.Post, $"{EndPoint}/p1/repositories/{repository.Id}/reports/release", JsonConvert.SerializeObject(contentBody));
         }
-
 
         public async Task<dynamic> GetReleaseReport(string zenHubReleaseId)
         {
@@ -286,6 +279,28 @@ namespace ZenHub
             };
 
             return await MakeRequestAsync(RequestMethod.Patch, $"{EndPoint}/p1/reports/release/{ZenHubReleaseId}/issues", JsonConvert.SerializeObject(contentBody));
+        }
+
+        private async Task<dynamic> MakeRequestAsync(RequestMethod method, string endpoint, string jsonBody = "")
+        {
+            var request = _pipeline.CreateRequest();
+            request.Method = method;
+            request.UriBuilder.Uri = new Uri(endpoint);
+
+            if (!string.IsNullOrEmpty(jsonBody))
+            {
+                request.Content = HttpPipelineRequestContent.Create(Encoding.UTF8.GetBytes(jsonBody));
+                request.Headers.Add("Content-Type", "application/json");
+            }
+
+            var response = await _pipeline.SendRequestAsync(request, CancellationToken.None).ConfigureAwait(false);
+
+            // read the content from the stream
+            // The policy will throw if we received an invalid response
+            using (StreamReader sr = new StreamReader(response.ContentStream))
+            {
+                return JsonConvert.DeserializeObject<dynamic>(await sr.ReadToEndAsync());
+            }
         }
 
     }
