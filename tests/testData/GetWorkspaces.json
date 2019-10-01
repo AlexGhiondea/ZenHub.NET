@@ -1,0 +1,35 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p2/repositories/1/workspaces"
+        }
+      ]
+    },
+    "Methods": [
+      "get"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": [
+      {
+        "name": "Design and UX",
+        "description": null,
+        "id": "5d0a7a9741fd098f6b7f58ac",
+        "repositories": [ 12345678, 912345 ]
+      },
+      {
+        "name": "Roadmap",
+        "description": "Feature planning and enhancements",
+        "id": "5d0a7cea41fd098f6b7f58b8",
+        "repositories": [ 12345678 ]
+      }
+    ],
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

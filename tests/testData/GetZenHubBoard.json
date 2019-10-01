@@ -1,0 +1,76 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p2/workspaces/dummyWorkspace/repositories/1/board"
+        }
+      ]
+    },
+    "Methods": [
+      "get"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": {
+      "pipelines": [
+        {
+          "id": "595d430add03f01d32460080",
+          "name": "New Issues",
+          "issues": [
+            {
+              "issue_number": 279,
+              "estimate": { "value": 40 },
+              "position": 0,
+              "is_epic": true
+            },
+            {
+              "issue_number": 142,
+              "is_epic": false
+            }
+          ]
+        },
+        {
+          "id": "595d430add03f01d32460081",
+          "name": "Backlog",
+          "issues": [
+            {
+              "issue_number": 303,
+              "estimate": { "value": 40 },
+              "position": 3,
+              "is_epic": false
+            }
+          ]
+        },
+        {
+          "id": "595d430add03f01d32460082",
+          "name": "To Do",
+          "issues": [
+            {
+              "issue_number": 380,
+              "estimate": { "value": 1 },
+              "position": 0,
+              "is_epic": true
+            },
+            {
+              "issue_number": 284,
+              "position": 2,
+              "is_epic": false
+            },
+            {
+              "issue_number": 329,
+              "estimate": { "value": 8 },
+              "position": 7,
+              "is_epic": false
+            }
+          ]
+        }
+      ]
+    },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/reports/release"
+        }
+      ]
+    },
+    "Methods": [
+      "post"
+    ],
+    "BodyAsJson": {
+      "title": "",
+      "description": "",
+      "start_date": "2019-11-19T08:00:00Z",
+      "desired_end_date": "2019-11-19T08:00:00Z",
+      "repositories": []
+    }
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": {
+      "closed_at": null,
+      "created_at": "2017-10-12T23:04:21.795Z",
+      "description": "Amazing description",
+      "desired_end_date": "2007-01-01T00:00:00.000Z",
+      "release_id": "59dff4f508399a35a276a1ea",
+      "repositories": [ 103707262 ],
+      "start_date": "2007-01-01T00:00:00.000Z",
+      "state": "open",
+      "title": "Great title"
+    },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
