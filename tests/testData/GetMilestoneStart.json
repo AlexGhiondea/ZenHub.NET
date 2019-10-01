@@ -1,0 +1,22 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/milestones/1/start_date"
+        }
+      ]
+    },
+    "Methods": [
+      "get"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": { "start_date": "2010-11-13T01:38:56.842Z" },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

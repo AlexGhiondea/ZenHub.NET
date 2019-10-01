@@ -1,0 +1,33 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/epics/2/convert_to_epic"
+        }
+      ]
+    },
+    "Methods": [
+      "post"
+    ],
+    "BodyAsJson": {
+      "issues": [
+        {
+          "repo_id": 13550592,
+          "issue_number": 3
+        },
+        {
+          "repo_id": 13550592,
+          "issue_number": 1
+        }
+      ]
+    }
+  },
+  "Response": {
+    "StatusCode": 200,
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/epics/2/convert_to_issue"
+        }
+      ]
+    },
+    "Methods": [
+      "post"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

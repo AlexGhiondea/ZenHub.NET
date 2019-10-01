@@ -1,0 +1,70 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/issues/2/events"
+        }
+      ]
+    },
+    "Methods": [
+      "get"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": [
+      {
+        "user_id": 16717,
+        "type": "estimateIssue",
+        "created_at": "2015-12-11T19:43:22.296Z",
+        "from_estimate": {
+          "value": 8
+        }
+      },
+      {
+        "user_id": 16717,
+        "type": "estimateIssue",
+        "created_at": "2015-12-11T18:43:22.296Z",
+        "from_estimate": {
+          "value": 4
+        },
+        "to_estimate": {
+          "value": 8
+        }
+      },
+      {
+        "user_id": 16717,
+        "type": "estimateIssue",
+        "created_at": "2015-12-11T13:43:22.296Z",
+        "to_estimate": {
+          "value": 4
+        }
+      },
+      {
+        "user_id": 16717,
+        "type": "transferIssue",
+        "created_at": "2015-12-11T12:43:22.296Z",
+        "from_pipeline": {
+          "name": "Backlog"
+        },
+        "to_pipeline": {
+          "name": "In progress"
+        },
+        "workspace_id": "5d0a7a9741fd098f6b7f58ac"
+      },
+      {
+        "user_id": 16717,
+        "type": "transferIssue",
+        "created_at": "2015-12-11T11:43:22.296Z",
+        "to_pipeline": {
+          "name": "Backlog"
+        }
+      }
+    ],
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

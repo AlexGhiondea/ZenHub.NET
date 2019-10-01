@@ -1,0 +1,45 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/dependencies"
+        }
+      ]
+    },
+    "Methods": [
+      "get"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": {
+      "dependencies": [
+        {
+          "blocking": {
+            "issue_number": 3953,
+            "repo_id": 1234567
+          },
+          "blocked": {
+            "issue_number": 1342,
+            "repo_id": 1234567
+          }
+        },
+        {
+          "blocking": {
+            "issue_number": 5,
+            "repo_id": 987
+          },
+          "blocked": {
+            "issue_number": 1342,
+            "repo_id": 1234567
+          }
+        }
+      ]
+    },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

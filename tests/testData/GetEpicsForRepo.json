@@ -1,0 +1,35 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/epics"
+        }
+      ]
+    },
+    "Methods": [
+      "get"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": {
+      "epic_issues": [
+        {
+          "issue_number": 3953,
+          "repo_id": 1234567,
+          "issue_url": "https://github.com/RepoOwner/RepoName/issues/3953"
+        },
+        {
+          "issue_number": 1342,
+          "repo_id": 1234567,
+          "issue_url": "https://github.com/RepoOwner/RepoName/issues/1342"
+        }
+      ]
+    },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
