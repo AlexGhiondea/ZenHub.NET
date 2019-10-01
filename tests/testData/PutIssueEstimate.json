@@ -1,0 +1,22 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/issues/2/estimate"
+        }
+      ]
+    },
+    "Methods": [
+      "put"
+    ]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": { "estimate": 15 },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

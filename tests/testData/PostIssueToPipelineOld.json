@@ -1,0 +1,25 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/issues/2/moves"
+        }
+      ]
+    },
+    "Methods": [
+      "post"
+    ],
+    "BodyAsJson": {
+      "pipeline_id": "pipelineDummy",
+      "position": 1
+    }
+  },
+  "Response": {
+    "StatusCode": 200,
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

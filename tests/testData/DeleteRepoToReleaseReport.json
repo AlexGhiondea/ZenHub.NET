@@ -1,0 +1,21 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/reports/release/dummyRelease/repository/1"
+        }
+      ]
+    },
+    "Methods": [
+      "delete"
+    ]
+  },
+  "Response": {
+    "StatusCode": 204,
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
