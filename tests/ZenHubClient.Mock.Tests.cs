@@ -349,7 +349,5 @@ namespace ZenHub.Tests
 
             return issue;
         }
-
-
     }
 }

@@ -1,0 +1,31 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/dependencies"
+        }
+      ]
+    },
+    "Methods": [
+      "delete"
+    ],
+    "BodyAsJson": {
+      "blocking": {
+        "repo_id": 1,
+        "issue_number": 2
+      },
+      "blocked": {
+        "repo_id": 1,
+        "issue_number": 2
+      }
+    }
+  },
+  "Response": {
+    "StatusCode": 204,
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
