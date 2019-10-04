@@ -44,10 +44,9 @@ namespace ZenHub.Tests
 
             var result = _zenhubClient.GetIssueDataAsync(repoId, issueNumber).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual(8, result.Estimate.Value);
-            Assert.AreEqual(true, result.IsEpic);
-            Assert.AreEqual("5d0a7cea41fd098f6b7f58b7", result.Pipelines[1].PipelineId);
+            Assert.AreEqual(8, result.Value.Estimate.Value);
+            Assert.AreEqual(true, result.Value.IsEpic);
+            Assert.AreEqual("5d0a7cea41fd098f6b7f58b7", result.Value.Pipelines[1].PipelineId);
         }
 
         [Test]
@@ -58,9 +57,8 @@ namespace ZenHub.Tests
 
             var result = _zenhubClient.GetIssueEventsAsync(repoId, issueNumber).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual(16717, result[0].UserId);
-            Assert.AreEqual("transferIssue", result[3].EventType);
+            Assert.AreEqual(16717, result.Value[0].UserId);
+            Assert.AreEqual("transferIssue", result.Value[3].EventType);
         }
 
         [Test]
@@ -71,7 +69,7 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetEpicsAsync(repoId).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual(3953, result.Epics[0].IssueNumber);
+            Assert.AreEqual(3953, result.Value.Epics[0].IssueNumber);
         }
 
         [Test]
@@ -84,7 +82,7 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetEpicDataAsync(repoId, epicId).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual(3161, result.Issues[0].IssueNumber);
+            Assert.AreEqual(3161, result.Value.Issues[0].IssueNumber);
         }
 
         [Test]
@@ -95,8 +93,8 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetWorkspaces(new Octokit.Repository(repoId)).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual("Design and UX", result[0].Name);
-            Assert.AreEqual(12345678, (int)result[1].Repositories[0]);
+            Assert.AreEqual("Design and UX", result.Value[0].Name);
+            Assert.AreEqual(12345678, (int)result.Value[1].Repositories[0]);
         }
 
         [Test]
@@ -108,7 +106,7 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetZenHubBoard(repository, ZenHubWorkspaceId).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual("595d430add03f01d32460080", result.Pipelines[0].Id);
+            Assert.AreEqual("595d430add03f01d32460080", result.Value.Pipelines[0].Id);
         }
 
         [Test]
@@ -119,7 +117,7 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetOldestZenHubBoard(repository).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual("595d430add03f01d32460080", result.Pipelines[0].Id);
+            Assert.AreEqual("595d430add03f01d32460080", result.Value.Pipelines[0].Id);
         }
 
         [Test]
@@ -130,7 +128,7 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetDependencies(repository).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual(3953, (int)result.dependencies[0].blocking.issue_number);
+            Assert.AreEqual(3953, result.Value.Dependencies[0].Blocking.IssueNumber);
         }
 
         [Test]
@@ -141,7 +139,7 @@ namespace ZenHub.Tests
             var result = _zenhubClient.GetReleaseReport(zenHubReleaseId).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual("59d3cd520a430a6344fd3bdb", result.ReleaseId);
+            Assert.AreEqual("59d3cd520a430a6344fd3bdb", result.Value.ReleaseId);
         }
 
         [Test]
@@ -151,8 +149,7 @@ namespace ZenHub.Tests
 
             var result = _zenhubClient.GetReleaseReports(repository).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual("59cbf2fde010f7a5207406e8", (string)result[0].ReleaseId);
+            Assert.AreEqual("59cbf2fde010f7a5207406e8", result.Value[0].ReleaseId);
         }
 
 
@@ -161,10 +158,10 @@ namespace ZenHub.Tests
         {
             var zenHubReleaseId = MockServer.ZenHubReleaseId;
 
-            var result = _zenhubClient.EditReleaseReport(zenHubReleaseId, "", "", DateTime.Now, DateTime.Now, "").GetAwaiter().GetResult();
+            var result = _zenhubClient.EditReleaseReport(zenHubReleaseId, "Amazing title", "Amazing description", DateTime.Parse("2007-01-01T00:00:00Z"), DateTime.Parse("2007-01-01T00:00:00Z"), "closed").GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual("59d3d6438b3f16667f9e7174", (string)result.release_id);
+            Assert.AreEqual("59d3d6438b3f16667f9e7174", result.Value.ReleaseId);
+            Assert.AreEqual("Amazing title", result.Value.Title);
         }
 
 
@@ -175,8 +172,7 @@ namespace ZenHub.Tests
 
             var result = _zenhubClient.GetAllIssuesInReleaseReport(zenHubReleaseId).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual(103707262, (int)result[0].RepositoryId);
+            Assert.AreEqual(103707262, result.Value[0].RepositoryId);
         }
 
         [Test]
@@ -185,10 +181,8 @@ namespace ZenHub.Tests
             long repoId = MockServer.repoId;
             int issueNumber = MockServer.issueNumber;
 
-            var result = _zenhubClient.SetEstimateAsync(repoId, issueNumber, 15).GetAwaiter().GetResult();
-
-            Assert.NotNull(result);
-            Assert.AreEqual(15, (int)result.estimate);
+            var response = _zenhubClient.SetEstimateAsync(repoId, issueNumber, 15).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -196,10 +190,8 @@ namespace ZenHub.Tests
         {
             var zenHubReleaseId = MockServer.ZenHubReleaseId;
 
-            var result = _zenhubClient.ChangeIssuesToReleaseReport(zenHubReleaseId, new Issue[] { }, new Issue[] { }).GetAwaiter().GetResult();
-
-            Assert.NotNull(result);
-            Assert.AreEqual(103707262, (int)result.added[0].repo_id);
+            var response = _zenhubClient.ChangeIssuesToReleaseReport(zenHubReleaseId, new Issue[] { }, new Issue[] { }).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -208,10 +200,8 @@ namespace ZenHub.Tests
             long repoId = MockServer.repoId;
             int issueNumber = MockServer.issueNumber;
 
-            var result = _zenhubClient.AddOrRemoveIssueToEpic(ObjectCreator.CreateIssue(issueNumber, repoId), new Issue[] { }, new Issue[] { }).GetAwaiter().GetResult();
-
-            Assert.NotNull(result);
-            Assert.AreEqual(2, (int)result.add_issues[0].issue_number);
+            var response = _zenhubClient.AddOrRemoveIssueToEpic(ObjectCreator.CreateIssue(issueNumber, repoId), new Issue[] { }, new Issue[] { }).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -222,10 +212,8 @@ namespace ZenHub.Tests
             string workspaceId = MockServer.ZenHubWorkspaceId;
             string pipelineId = MockServer.ZenHubPipelineId;
 
-            var result = _zenhubClient.MoveIssueToPipeline(ObjectCreator.CreateIssue(issueNumber, repoId), workspaceId, pipelineId, 1).GetAwaiter().GetResult();
-
-            // no response
-            Assert.Null(result);
+            var response = _zenhubClient.MoveIssueToPipeline(ObjectCreator.CreateIssue(issueNumber, repoId), workspaceId, pipelineId, 1).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -235,10 +223,8 @@ namespace ZenHub.Tests
             int issueNumber = MockServer.issueNumber;
             string pipelineId = MockServer.ZenHubPipelineId;
 
-            var result = _zenhubClient.MoveIssueToPipelineOldestWorkspace(ObjectCreator.CreateIssue(issueNumber, repoId), pipelineId, 1).GetAwaiter().GetResult();
-
-            // no response
-            Assert.Null(result);
+            var response = _zenhubClient.MoveIssueToPipelineOldestWorkspace(ObjectCreator.CreateIssue(issueNumber, repoId), pipelineId, 1).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -246,9 +232,8 @@ namespace ZenHub.Tests
         {
             long repoId = MockServer.repoId;
             int issueNumber = MockServer.issueNumber;
-            var result = _zenhubClient.ConvertIssueToEpic(ObjectCreator.CreateIssue(issueNumber, repoId)).GetAwaiter().GetResult();
-
-            Assert.Null(result);
+            var response = _zenhubClient.ConvertIssueToEpic(ObjectCreator.CreateIssue(issueNumber, repoId)).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -256,9 +241,8 @@ namespace ZenHub.Tests
         {
             long repoId = MockServer.repoId;
             int issueNumber = MockServer.issueNumber;
-            var result = _zenhubClient.ConvertIssueToEpic(ObjectCreator.CreateIssue(issueNumber, repoId), ObjectCreator.CreateIssue(3, 13550592), ObjectCreator.CreateIssue(1, 13550592)).GetAwaiter().GetResult();
-
-            Assert.Null(result);
+            var response = _zenhubClient.ConvertIssueToEpic(ObjectCreator.CreateIssue(issueNumber, repoId), ObjectCreator.CreateIssue(3, 13550592), ObjectCreator.CreateIssue(1, 13550592)).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
@@ -266,9 +250,8 @@ namespace ZenHub.Tests
         {
             long repoId = MockServer.repoId;
             int issueNumber = MockServer.issueNumber;
-            var result = _zenhubClient.ConvertEpicToIssue(ObjectCreator.CreateIssue(issueNumber, repoId)).GetAwaiter().GetResult();
-
-            Assert.Null(result);
+            var response = _zenhubClient.ConvertEpicToIssue(ObjectCreator.CreateIssue(issueNumber, repoId)).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
 
@@ -278,8 +261,7 @@ namespace ZenHub.Tests
             long repoId = MockServer.repoId;
             var result = _zenhubClient.GetMilestoneStart(new Repository(repoId), new Milestone(MockServer.milestoneNumber)).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual("11/13/2010 01:38:56", (string)result.start_date);
+            Assert.AreEqual(DateTime.Parse("2010-11-13T01:38:56.842Z").ToLocalTime(), result.Value.Start.ToLocalTime());
         }
 
         [Test]
@@ -289,8 +271,7 @@ namespace ZenHub.Tests
             DateTime startDate = new DateTime(2019, 11, 1);
             var result = _zenhubClient.SetMilestoneStart(new Repository(repoId), new Milestone(MockServer.milestoneNumber), startDate).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual(startDate.ToUniversalTime(), (DateTime)result.start_date);
+            Assert.AreEqual(startDate.ToUniversalTime(), (DateTime)result.Value.Start.ToUniversalTime());
         }
 
         [Test]
@@ -298,19 +279,18 @@ namespace ZenHub.Tests
         {
             var result = _zenhubClient.CreateDependency(ObjectCreator.CreateIssue(MockServer.issueNumber, MockServer.repoId), ObjectCreator.CreateIssue(MockServer.issueNumber, MockServer.repoId)).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.AreEqual(MockServer.repoId, (long)result.blocking.repo_id);
-            Assert.AreEqual(MockServer.issueNumber, (int)result.blocking.issue_number);
+            Assert.AreEqual(MockServer.repoId, result.Value.Blocking.RepositoryId);
+            Assert.AreEqual(MockServer.issueNumber, result.Value.Blocking.IssueNumber);
         }
 
         [Test]
         public void DeleteDependency1()
         {
-            var result = _zenhubClient.DeleteDependency(
+            var response = _zenhubClient.DeleteDependency(
                 ObjectCreator.CreateIssue(MockServer.issueNumber, MockServer.repoId),
                 ObjectCreator.CreateIssue(MockServer.issueNumber, MockServer.repoId)).GetAwaiter().GetResult();
 
-            Assert.Null(result);
+            Assert.AreEqual(204, response.Status);
         }
 
         [Test]
@@ -319,23 +299,21 @@ namespace ZenHub.Tests
             var result = _zenhubClient.CreateReleaseReport(new Repository(MockServer.repoId), "", "", new DateTime(2019, 11, 19), new DateTime(2019, 11, 19), Enumerable.Empty<Repository>()).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
-            Assert.AreEqual("59dff4f508399a35a276a1ea", (string)result.ReleaseId);
+            Assert.AreEqual("59dff4f508399a35a276a1ea", result.Value.ReleaseId);
         }
 
         [Test]
         public void AddRepositoryToReleaseReport1()
         {
-            var result = _zenhubClient.AddRepositoryToReleaseReport(MockServer.ZenHubReleaseId, new Repository(MockServer.repoId)).GetAwaiter().GetResult();
-
-            Assert.Null(result);
+            var response = _zenhubClient.AddRepositoryToReleaseReport(MockServer.ZenHubReleaseId, new Repository(MockServer.repoId)).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
         }
 
         [Test]
         public void RemoveRepositoryFromReleaseReport1()
         {
-            var result = _zenhubClient.RemoveRepositoryFromReleaseReport(MockServer.ZenHubReleaseId, new Repository(MockServer.repoId)).GetAwaiter().GetResult();
-
-            Assert.Null(result);
+            var response = _zenhubClient.RemoveRepositoryFromReleaseReport(MockServer.ZenHubReleaseId, new Repository(MockServer.repoId)).GetAwaiter().GetResult();
+            Assert.AreEqual(204, response.Status);
         }
     }
 }

@@ -6,7 +6,14 @@
           "Name": "ExactMatcher",
           "Pattern": "/p1/reports/release/dummyRelease"
         }
-      ]
+      ],
+      "BodyAsJson": {
+        "title": "Amazing title",
+        "description": "Amazing description",
+        "start_date": "2007-01-01T00:00:00Z",
+        "desired_end_date": "2007-01-01T00:00:00Z",
+        "state": "closed"
+      }
     },
     "Methods": [
       "patch"

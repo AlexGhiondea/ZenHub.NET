@@ -30,6 +30,6 @@ namespace ZenHub.Models
         public Pipeline Pipeline { get; set; }
 
         [JsonPropertyName("plus_ones")]
-        public CreatedData[] PlusOnes { get; set; }
+        public CreatedDate[] PlusOnes { get; set; }
     }
 }
