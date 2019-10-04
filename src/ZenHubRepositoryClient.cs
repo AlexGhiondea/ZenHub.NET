@@ -72,7 +72,6 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-
         /// <summary>
         /// Set the start date for a repository milestone
         /// </summary>

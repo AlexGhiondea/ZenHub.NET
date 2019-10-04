@@ -60,7 +60,6 @@ namespace ZenHub
             return new ZenHubIssueClient(repoId, issueNumber, _pipeline, _options);
         }
 
-
         /// <summary>
         /// Get the Essue client for a given epic
         /// </summary>
