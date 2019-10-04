@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace ZenHub.Models
 {
-    public class ZenhubIssueEvent
+    public class IssueEvent
     {
         [JsonPropertyName("user_id")]
         public long UserId { get; set; }
