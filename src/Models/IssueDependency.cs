@@ -5,9 +5,9 @@ namespace ZenHub.Models
     public class IssueDependency
     {
         [JsonPropertyName("blocking")]
-        public IssueData Blocking { get; set; }
+        public IssueDetails Blocking { get; set; }
 
         [JsonPropertyName("blocked")]
-        public IssueData Blocked { get; set; }
+        public IssueDetails Blocked { get; set; }
     }
 }

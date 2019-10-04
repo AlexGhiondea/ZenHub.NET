@@ -22,7 +22,7 @@ namespace ZenHub
         {
             _releaseId = releaseId;
         }
-        public async Task<Response<ReleaseReport>> GetReleaseReportAsync(CancellationToken cancellationToken = default)
+        public async Task<Response<ReleaseReport>> GetReportAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<ReleaseReport>(
                     RequestMethod.Get,
@@ -31,7 +31,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response<ReleaseReport>> EditReleaseReportAsync(string Title, string Description, DateTime StartDate, DateTime EndDate, string State, CancellationToken cancellationToken = default)
+        public async Task<Response<ReleaseReport>> EditReportAsync(string Title, string Description, DateTime StartDate, DateTime EndDate, string State, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {
@@ -50,7 +50,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> AddRepositoryToReleaseReportAsync(Repository repositoryToAdd, CancellationToken cancellationToken = default)
+        public async Task<Response> AddRepositoryAsync(Repository repositoryToAdd, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync(
                     RequestMethod.Post,
@@ -59,7 +59,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> RemoveRepositoryFromReleaseReportAsync(Repository repositoryToRemove, CancellationToken cancellationToken = default)
+        public async Task<Response> RemoveRepositoryAsync(Repository repositoryToRemove, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync(
                     RequestMethod.Delete,
@@ -68,16 +68,26 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response<IssueData[]>> GetAllIssuesInReleaseReportAsync(CancellationToken cancellationToken = default)
+        public async Task<Response<IssueDetails[]>> GetIssuesAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<IssueData[]>(
+            return await MakeRequestAsync<IssueDetails[]>(
                     RequestMethod.Get,
                     $"{_options.EndPoint}/p1/reports/release/{_releaseId}/issues",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> ChangeIssuesToReleaseReportAsync(IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
+        public async Task<Response> AddIssuesAsync(IEnumerable<Issue> issuesToAdd, CancellationToken cancellationToken = default)
+        {
+            return await ChangeIssuesToReleaseReportAsync(issuesToAdd, Enumerable.Empty<Issue>(), cancellationToken);
+        }
+
+        public async Task<Response> RemoveIssuesAsync(IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
+        {
+            return await ChangeIssuesToReleaseReportAsync(Enumerable.Empty<Issue>(), issuesToRemove, cancellationToken);
+        }
+
+        private async Task<Response> ChangeIssuesToReleaseReportAsync(IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {

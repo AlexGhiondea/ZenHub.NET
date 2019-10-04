@@ -2,7 +2,7 @@
 
 namespace ZenHub.Models
 {
-    public class EpicData
+    public class EpicDetails
     {
         [JsonPropertyName("total_epic_estimates")]
         public EstimateValue TotalEstimate { get; set; }
@@ -17,6 +17,6 @@ namespace ZenHub.Models
         public Pipeline[] Pipelines { get; set; }
 
         [JsonPropertyName("issues")]
-        public IssueData[] Issues { get; set; }
+        public IssueDetails[] Issues { get; set; }
     }
 }

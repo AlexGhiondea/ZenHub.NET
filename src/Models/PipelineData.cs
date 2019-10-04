@@ -11,6 +11,6 @@ namespace ZenHub.Models
         public string Name { get; set; }
 
         [JsonPropertyName("issues")]
-        public IssueData[] Issues { get; set; }
+        public IssueDetails[] Issues { get; set; }
     }
 }

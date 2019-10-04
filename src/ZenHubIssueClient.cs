@@ -25,16 +25,16 @@ namespace ZenHub
             _issueNumber = issueNumber;
         }
 
-        public async Task<Response<IssueData>> GetIssueDataAsync(CancellationToken cancellationToken = default)
+        public async Task<Response<IssueDetails>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<IssueData>(
+            return await MakeRequestAsync<IssueDetails>(
                     RequestMethod.Get, 
                     $"{_options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response<Models.IssueEvent[]>> GetIssueEventsAsync(CancellationToken cancellationToken = default)
+        public async Task<Response<Models.IssueEvent[]>> GetEventsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<Models.IssueEvent[]>(
                     RequestMethod.Get,
@@ -58,7 +58,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> MoveIssueToPipelineAsync(string ZenHubWorkspaceId, string PipelineId, int position, CancellationToken cancellationToken = default)
+        public async Task<Response> MoveToPipelineAsync(string ZenHubWorkspaceId, string PipelineId, int position, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {
@@ -74,7 +74,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> MoveIssueToPipelineOldestWorkspaceAsync(string PipelineId, int position, CancellationToken cancellationToken = default)
+        public async Task<Response> MoveToPipelineInOldestWorkspaceAsync(string PipelineId, int position, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {
@@ -90,7 +90,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> ConvertIssueToEpicAsync(IEnumerable<Issue> issuesToAddToEpic, CancellationToken cancellationToken = default)
+        public async Task<Response> ConvertToEpicAsync(IEnumerable<Issue> issuesToAddToEpic, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {
@@ -105,7 +105,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response<IssueDependency>> CreateBlockedByDependencyAsync(Issue blockingIssue,CancellationToken cancellationToken = default)
+        public async Task<Response<IssueDependency>> AddBlockedByAsync(Issue blockingIssue,CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {
@@ -129,7 +129,7 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
-        public async Task<Response> DeleteBlockedByDependencyAsync(Issue blockingIssue, CancellationToken cancellationToken = default)
+        public async Task<Response> RemoveBlockedByAsync(Issue blockingIssue, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {

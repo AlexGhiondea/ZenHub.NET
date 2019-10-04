@@ -2,7 +2,7 @@
 
 namespace ZenHub.Models
 {
-    public class IssueData
+    public class IssueDetails
     {
         [JsonPropertyName("issue_number")]
         public int IssueNumber { get; set; }
