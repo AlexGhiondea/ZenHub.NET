@@ -25,6 +25,9 @@ namespace ZenHub
             _epicNumber = epicNumber;
         }
 
+        /// <summary>
+        /// Get details about the epic
+        /// </summary>
         public async Task<Response<EpicDetails>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<EpicDetails>(
@@ -34,16 +37,27 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Add issues to the epic
+        /// </summary>
+        /// <param name="issuesToAdd">A collection of issues to add</param>
         public async Task<Response> AddIssuesAsync(IEnumerable<Issue> issuesToAdd, CancellationToken cancellationToken = default)
         {
             return await AddOrRemoveIssueToEpicAsync(issuesToAdd, Enumerable.Empty<Issue>(), cancellationToken);
         }
 
+        /// <summary>
+        /// Remove issues from the epic
+        /// </summary>
+        /// <param name="issuesToAdd">A collection of issues to remove</param>
         public async Task<Response> RemoveIssuesAsync(IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
         {
             return await AddOrRemoveIssueToEpicAsync(Enumerable.Empty<Issue>(), issuesToRemove, cancellationToken);
         }
 
+        /// <summary>
+        /// Converts the current epic to an issue
+        /// </summary>
         public async Task<Response> ConvertToIssueAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync(

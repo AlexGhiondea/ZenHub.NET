@@ -23,6 +23,9 @@ namespace ZenHub
             _repositoryId = repositoryId;
         }
 
+        /// <summary>
+        /// Get the workspaces for the repository
+        /// </summary>
         public async Task<Response<Workspace[]>> GetWorkspacesAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<Workspace[]>(
@@ -32,6 +35,10 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the board for the repository
+        /// </summary>
+        /// <param name="ZenHubWorkspaceId">The workspace id to use</param>
         public async Task<Response<ZenHubBoard>> GetZenHubBoardAsync(string ZenHubWorkspaceId, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<ZenHubBoard>(
@@ -41,6 +48,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the oldest board for the repository
+        /// </summary>
         public async Task<Response<ZenHubBoard>> GetOldestZenHubBoardAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<ZenHubBoard>(
@@ -50,6 +60,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the start of the milestone in the repository
+        /// </summary>
         public async Task<Response<StartDate>> GetMilestoneStartAsync(Milestone milestone, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<StartDate>(
@@ -59,6 +72,12 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+
+        /// <summary>
+        /// Set the start date for a repository milestone
+        /// </summary>
+        /// <param name="milestone">The milestone to set the start date to</param>
+        /// <param name="startDate">The start date for the milestone</param>
         public async Task<Response<StartDate>> SetMilestoneStartAsync(Milestone milestone, DateTime startDate, CancellationToken cancellationToken = default)
         {
             var contentBody = new
@@ -74,6 +93,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the dependencies for the repo
+        /// </summary>
         public async Task<Response<RepoDependencies>> GetDependenciesAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<RepoDependencies>(
@@ -83,6 +105,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the epics for the repository
+        /// </summary>
         public async Task<Response<EpicList>> GetEpicsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<EpicList>(
@@ -92,6 +117,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Create a release report for the repository
+        /// </summary>
         public async Task<Response<ReleaseReport>> CreateReleaseReportAsync(string Title, string Description, DateTime startDate, DateTime endDate, IEnumerable<Repository> repositoriesInTheReport, CancellationToken cancellationToken = default)
         {
             long[] repos = repositoriesInTheReport.Select(x => x.Id).ToArray();
@@ -113,6 +141,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the release reports for the repository
+        /// </summary>
         public async Task<Response<ReleaseReport[]>> GetReleaseReportsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<ReleaseReport[]>(
@@ -121,7 +152,5 @@ namespace ZenHub
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
-
-
     }
 }

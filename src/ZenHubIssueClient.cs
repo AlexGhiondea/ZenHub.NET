@@ -25,6 +25,9 @@ namespace ZenHub
             _issueNumber = issueNumber;
         }
 
+        /// <summary>
+        /// Get details about the issue
+        /// </summary>
         public async Task<Response<IssueDetails>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<IssueDetails>(
@@ -34,6 +37,9 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Get the events for the isue
+        /// </summary>
         public async Task<Response<Models.IssueEvent[]>> GetEventsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<Models.IssueEvent[]>(
@@ -43,6 +49,10 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Set the estimate on the issue
+        /// </summary>
+        /// <param name="estimate">The value of the estimate</param>
         public async Task<Response> SetEstimateAsync(int estimate, CancellationToken cancellationToken = default)
         {
             var contentBody = new
@@ -58,6 +68,12 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Move the issue to a pipeline
+        /// </summary>
+        /// <param name="ZenHubWorkspaceId">The ZenHub id of the workspace where the pipeline is</param>
+        /// <param name="PipelineId">The pipeline id</param>
+        /// <param name="position">The position in the pipeline to add the issue to</param>
         public async Task<Response> MoveToPipelineAsync(string ZenHubWorkspaceId, string PipelineId, int position, CancellationToken cancellationToken = default)
         {
             var contentBody = new
@@ -73,7 +89,11 @@ namespace ZenHub
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
-
+        /// <summary>
+        /// Move the issue to a pipeline
+        /// </summary>
+        /// <param name="PipelineId">The pipeline id of the oldest board</param>
+        /// <param name="position">The position in the pipeline to add the issue to</param>
         public async Task<Response> MoveToPipelineInOldestWorkspaceAsync(string PipelineId, int position, CancellationToken cancellationToken = default)
         {
             var contentBody = new
@@ -90,6 +110,10 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Converts the issue to an epic
+        /// </summary>
+        /// <param name="issuesToAddToEpic">The list of issues to add to the epic during the conversion</param>
         public async Task<Response> ConvertToEpicAsync(IEnumerable<Issue> issuesToAddToEpic, CancellationToken cancellationToken = default)
         {
             var contentBody = new
@@ -105,6 +129,10 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Add a blocked dependency to the issue
+        /// </summary>
+        /// <param name="blockingIssue">The issue that is blocking</param>
         public async Task<Response<IssueDependency>> AddBlockedByAsync(Issue blockingIssue,CancellationToken cancellationToken = default)
         {
             var contentBody = new
@@ -129,6 +157,10 @@ namespace ZenHub
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Remove a blocked dependency to the issue
+        /// </summary>
+        /// <param name="blockingIssue">The issue that is blocking</param>
         public async Task<Response> RemoveBlockedByAsync(Issue blockingIssue, CancellationToken cancellationToken = default)
         {
             var contentBody = new
