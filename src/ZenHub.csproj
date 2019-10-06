@@ -5,6 +5,20 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>ZenHub.Net</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Authors>Alex Ghiondea</Authors>
+    <Description>Access the ZenHub API from .NET</Description>
+    <releaseNotes>Initial release of the library</releaseNotes>
+    <Copyright>Alex Ghiondea (c) 2019</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/ZenHub.Net/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/AlexGhiondea/ZenHub.Net</PackageProjectUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>ZenHub, API, SDK, Client, REST</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Azure.Core" Version="1.0.0-preview.8" />
     <PackageReference Include="Octokit" Version="0.33.0" />
