@@ -15,7 +15,7 @@
     <Description>Access the ZenHub API from .NET</Description>
     <releaseNotes>Initial release of the library</releaseNotes>
     <Copyright>Alex Ghiondea (c) 2019</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/ZenHub.Net/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://raw.githubusercontent.com/AlexGhiondea/ZenHub.Net/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/AlexGhiondea/ZenHub.Net</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>ZenHub, API, SDK, Client, REST</PackageTags>
