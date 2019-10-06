@@ -32,7 +32,7 @@ namespace ZenHub.Tests
             Server.ReadStaticMappings(
                 Path.Combine(
                     Path.GetDirectoryName(typeof(MockServer).Assembly.Location),
-                    @"..\..\..\testData")
+                    "..", "..", "..", "testData")
                 );
         }
 
