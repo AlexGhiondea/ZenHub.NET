@@ -123,7 +123,7 @@ namespace ZenHub
 
             return await MakeRequestAsync(
                     RequestMethod.Post, 
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_issueNumber}/convert_to_epic",
+                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/convert_to_epic",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
