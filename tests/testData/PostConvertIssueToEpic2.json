@@ -4,7 +4,7 @@
       "Matchers": [
         {
           "Name": "ExactMatcher",
-          "Pattern": "/p1/repositories/1/epics/2/convert_to_epic"
+          "Pattern": "/p1/repositories/1/issues/2/convert_to_epic"
         }
       ]
     },
