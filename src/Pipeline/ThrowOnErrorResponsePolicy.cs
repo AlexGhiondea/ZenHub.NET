@@ -1,3 +1,4 @@
+using Azure;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using System;
@@ -10,18 +11,18 @@ namespace ZenHub.Pipeline
         public override void Process(HttpPipelineMessage message,  ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
             ProcessNext(message, pipeline);
-            if (message.ResponseClassifier.IsErrorResponse(message.Response))
+            if (message.ResponseClassifier.IsErrorResponse(message))
             {
-                throw message.Response.CreateRequestFailedException();
+                throw new RequestFailedException(message.ToString());
             }
         }
 
-        public override async Task ProcessAsync(HttpPipelineMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
+        public override async ValueTask ProcessAsync(HttpPipelineMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
             await ProcessNextAsync(message, pipeline);
-            if (message.ResponseClassifier.IsErrorResponse(message.Response))
+            if (message.ResponseClassifier.IsErrorResponse(message))
             {
-                throw await message.Response.CreateRequestFailedExceptionAsync();
+                throw new RequestFailedException(message.ToString());
             }
         }
     }

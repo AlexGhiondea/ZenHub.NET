@@ -18,7 +18,7 @@ namespace ZenHub.Pipeline
             ProcessNext(message, pipeline);
         }
 
-        public override async Task ProcessAsync(HttpPipelineMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
+        public override async ValueTask ProcessAsync(HttpPipelineMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
             message.Request.Headers.Add("X-Authentication-Token", _authToken);
             await ProcessNextAsync(message, pipeline);
