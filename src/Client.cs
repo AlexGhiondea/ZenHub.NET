@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Core.Http;
 using Azure.Core.Pipeline;
 using System;
 using System.IO;
@@ -29,14 +30,14 @@ namespace ZenHub
             using StreamReader sr = new StreamReader(response.ContentStream);
             var deserializeValue = await System.Text.Json.JsonSerializer.DeserializeAsync<T>(response.ContentStream, cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            return new Response<T>(response, deserializeValue);
+            return Response.FromValue<T>(deserializeValue, response);
         }
 
         protected async Task<Response> MakeRequestAsync(RequestMethod method, string endpoint, string jsonBody = "", CancellationToken cancellationToken = default)
         {
             var request = _pipeline.CreateRequest();
             request.Method = method;
-            request.UriBuilder.Uri = new Uri(endpoint);
+            request.Uri.Reset(new Uri(endpoint));
 
             if (!string.IsNullOrEmpty(jsonBody))
             {
