@@ -21,10 +21,10 @@ namespace ZenHub.Models
         public EstimateValue ToEstimate { get; set; }
 
         [JsonPropertyName("to_pipeline")]
-        public Pipeline ToPipeline { get; set; }
+        public ZenHubPipeline ToPipeline { get; set; }
 
         [JsonPropertyName("from_pipeline")]
-        public Pipeline FromPipeline { get; set; }
+        public ZenHubPipeline FromPipeline { get; set; }
 
         [JsonPropertyName("workspace_id")]
         public string WorkspaceId { get; set; }

@@ -32,7 +32,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<EpicDetails>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -43,7 +43,29 @@ namespace ZenHub
         /// <param name="issuesToAdd">A collection of issues to add</param>
         public async Task<Response> AddIssuesAsync(IEnumerable<Issue> issuesToAdd, CancellationToken cancellationToken = default)
         {
-            return await AddOrRemoveIssueToEpicAsync(issuesToAdd, Enumerable.Empty<Issue>(), cancellationToken);
+            if (issuesToAdd == null)
+            {
+                issuesToAdd = Enumerable.Empty<Issue>();
+            }
+
+            // convert the list of issues to a list of tuples with just the information necessary
+            return await AddOrRemoveIssueToEpicAsync(issuesToAdd.Select(x => (x.Repository.Id, x.Number)), Enumerable.Empty<(long, int)>(), cancellationToken)
+                        .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Add issues to the epic
+        /// </summary>
+        /// <param name="issuesToAdd">An collection of tuple (repoId, issueNumber)</param>
+        public async Task<Response> AddIssuesAsync(IEnumerable<(long repoId, int issueNumber)> issuesToAdd, CancellationToken cancellationToken = default)
+        {
+            if (issuesToAdd == null)
+            {
+                issuesToAdd = Enumerable.Empty<(long, int)>();
+            }
+
+            return await AddOrRemoveIssueToEpicAsync(issuesToAdd, Enumerable.Empty<(long, int)>(), cancellationToken)
+                        .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -52,7 +74,29 @@ namespace ZenHub
         /// <param name="issuesToAdd">A collection of issues to remove</param>
         public async Task<Response> RemoveIssuesAsync(IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
         {
-            return await AddOrRemoveIssueToEpicAsync(Enumerable.Empty<Issue>(), issuesToRemove, cancellationToken);
+            if (issuesToRemove == null)
+            {
+                issuesToRemove = Enumerable.Empty<Issue>();
+            }
+
+            // convert the list of issues to a list of tuples with just the information necessary
+            return await AddOrRemoveIssueToEpicAsync(Enumerable.Empty<(long, int)>(), issuesToRemove.Select(x => (x.Repository.Id, x.Number)), cancellationToken)
+                        .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Remove issues from the epic
+        /// </summary>
+        /// <param name="issuesToAdd">A collection of of tuple (repoId, issueNumber)</param>
+        public async Task<Response> RemoveIssuesAsync(IEnumerable<(long repoId, int issueNumber)> issuesToRemove, CancellationToken cancellationToken = default)
+        {
+            if (issuesToRemove == null)
+            {
+                issuesToRemove = Enumerable.Empty<(long, int)>();
+            }
+
+            return await AddOrRemoveIssueToEpicAsync(Enumerable.Empty<(long, int)>(), issuesToRemove, cancellationToken)
+                        .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -62,22 +106,22 @@ namespace ZenHub
         {
             return await MakeRequestAsync(
                     RequestMethod.Post,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/convert_to_issue",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/convert_to_issue",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        private async Task<Response> AddOrRemoveIssueToEpicAsync(IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
+        private async Task<Response> AddOrRemoveIssueToEpicAsync(IEnumerable<(long repoId, int issueNumber)> issuesToAdd, IEnumerable<(long repoId, int issueNumber)> issuesToRemove, CancellationToken cancellationToken = default)
         {
             var contentBody = new
             {
-                add_issues = issuesToAdd.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Number }).ToArray(),
-                remove_issues = issuesToRemove.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Number }).ToArray()
+                add_issues = issuesToAdd.Select(x => new { repo_id = x.repoId, issue_number = x.issueNumber }).ToArray(),
+                remove_issues = issuesToRemove.Select(x => new { repo_id = x.repoId, issue_number = x.issueNumber }).ToArray()
             };
 
             return await MakeRequestAsync(
                     RequestMethod.Post,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/update_issues",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/update_issues",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);

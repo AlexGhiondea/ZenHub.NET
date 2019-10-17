@@ -2,7 +2,7 @@
 
 namespace ZenHub.Models
 {
-    public class Pipeline
+    public class ZenHubPipeline
     {
         [JsonPropertyName("workspace_id")]
         public string WorkspaceId { get; set; }

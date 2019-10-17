@@ -12,14 +12,15 @@ namespace ZenHub
 {
     public abstract class Client
     {
-        protected readonly ZenHubClientOptions _options;
-        protected readonly HttpPipeline _pipeline;
-
         internal Client(HttpPipeline pipeline, ZenHubClientOptions options)
         {
-            _options = options;
-            _pipeline = pipeline;
+            Options = options;
+            Pipeline = pipeline;
         }
+
+        protected HttpPipeline Pipeline { get; }
+
+        protected ZenHubClientOptions Options { get; }
 
         protected async Task<Response<T>> MakeRequestAsync<T>(RequestMethod method, string endpoint, string jsonBody = "", CancellationToken cancellationToken = default)
         {
@@ -35,7 +36,7 @@ namespace ZenHub
 
         protected async Task<Response> MakeRequestAsync(RequestMethod method, string endpoint, string jsonBody = "", CancellationToken cancellationToken = default)
         {
-            var request = _pipeline.CreateRequest();
+            var request = Pipeline.CreateRequest();
             request.Method = method;
             request.Uri.Reset(new Uri(endpoint));
 
@@ -45,7 +46,7 @@ namespace ZenHub
                 request.Headers.Add("Content-Type", "application/json");
             }
 
-            return await _pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return await Pipeline.SendRequestAsync(request, cancellationToken).ConfigureAwait(false);
         }
     }
 }
