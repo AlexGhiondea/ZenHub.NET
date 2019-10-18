@@ -47,6 +47,16 @@ namespace ZenHub.Tests
         }
 
         [Test]
+        public void ReleasesMethods_Null()
+        {
+            ZenHubClient zh = new ZenHubClient("dummy");
+            var relCl = zh.GetReleaseClient("release");
+
+            Assert.Throws<ArgumentNullException>(() => relCl.AddRepositoryAsync(null).GetAwaiter().GetResult());
+            Assert.Throws<ArgumentNullException>(() => relCl.RemoveRepositoryAsync(null).GetAwaiter().GetResult());
+        }
+
+        [Test]
         public void IssueMethods_Null()
         {
             ZenHubClient zh = new ZenHubClient("dummy");
