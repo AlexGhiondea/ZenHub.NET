@@ -213,6 +213,16 @@ namespace ZenHub.Tests
             Assert.AreEqual(200, response.Status);
         }
 
+        [Test]
+        public void RemoveIssueFromEpic2()
+        {
+            long repoId = MockServer.repoId;
+            int issueNumber = MockServer.issueNumber;
+
+            var response = _zenhubClient.GetEpicClient(repoId, issueNumber).AddIssuesAsync().GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
+        }
+
 
         [Test]
         public void AddIssueToEpic1()
@@ -221,6 +231,17 @@ namespace ZenHub.Tests
             int issueNumber = MockServer.issueNumber;
 
             var response = _zenhubClient.GetEpicClient(repoId, issueNumber).AddIssuesAsync(new Issue[] { }).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
+        }
+
+
+        [Test]
+        public void AddIssueToEpic2()
+        {
+            long repoId = MockServer.repoId;
+            int issueNumber = MockServer.issueNumber;
+
+            var response = _zenhubClient.GetEpicClient(repoId, issueNumber).AddIssuesAsync().GetAwaiter().GetResult();
             Assert.AreEqual(200, response.Status);
         }
 

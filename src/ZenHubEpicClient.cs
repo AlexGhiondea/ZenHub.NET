@@ -57,7 +57,7 @@ namespace ZenHub
         /// Add issues to the epic
         /// </summary>
         /// <param name="issuesToAdd">An collection of tuple (repoId, issueNumber)</param>
-        public async Task<Response> AddIssuesAsync(IEnumerable<(long repoId, int issueNumber)> issuesToAdd, CancellationToken cancellationToken = default)
+        public async Task<Response> AddIssuesAsync(IEnumerable<(long repoId, int issueNumber)> issuesToAdd = null, CancellationToken cancellationToken = default)
         {
             if (issuesToAdd == null)
             {
@@ -88,7 +88,7 @@ namespace ZenHub
         /// Remove issues from the epic
         /// </summary>
         /// <param name="issuesToAdd">A collection of of tuple (repoId, issueNumber)</param>
-        public async Task<Response> RemoveIssuesAsync(IEnumerable<(long repoId, int issueNumber)> issuesToRemove, CancellationToken cancellationToken = default)
+        public async Task<Response> RemoveIssuesAsync(IEnumerable<(long repoId, int issueNumber)> issuesToRemove = null, CancellationToken cancellationToken = default)
         {
             if (issuesToRemove == null)
             {
