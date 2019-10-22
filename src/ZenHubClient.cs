@@ -56,7 +56,7 @@ namespace ZenHub
             {
                 throw new ArgumentNullException(nameof(issue));
             }
-            
+
             return GetIssueClient(issue.Repository.Id, issue.Number);
         }
 

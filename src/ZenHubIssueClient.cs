@@ -2,10 +2,8 @@
 using Azure.Core.Pipeline;
 using Octokit;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +30,7 @@ namespace ZenHub
         public async Task<Response<IssueDetails>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<IssueDetails>(
-                    RequestMethod.Get, 
+                    RequestMethod.Get,
                     $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -63,7 +61,7 @@ namespace ZenHub
 
             return await MakeRequestAsync(
                     RequestMethod.Put,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/estimate", 
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/estimate",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -84,8 +82,8 @@ namespace ZenHub
             };
 
             return await MakeRequestAsync(
-                    RequestMethod.Post, 
-                    $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/issues/{_issueNumber}/moves", 
+                    RequestMethod.Post,
+                    $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/issues/{_issueNumber}/moves",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -104,7 +102,7 @@ namespace ZenHub
             };
 
             return await MakeRequestAsync(
-                    RequestMethod.Post, 
+                    RequestMethod.Post,
                     $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/moves",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
@@ -128,7 +126,7 @@ namespace ZenHub
             };
 
             return await MakeRequestAsync(
-                    RequestMethod.Post, 
+                    RequestMethod.Post,
                     $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/convert_to_epic",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
@@ -139,7 +137,7 @@ namespace ZenHub
         /// Add a blocked dependency to the issue
         /// </summary>
         /// <param name="blockingIssue">The issue that is blocking</param>
-        public async Task<Response<IssueDependency>> AddBlockedByAsync(Issue blockingIssue,CancellationToken cancellationToken = default)
+        public async Task<Response<IssueDependency>> AddBlockedByAsync(Issue blockingIssue, CancellationToken cancellationToken = default)
         {
             if (blockingIssue == null)
             {

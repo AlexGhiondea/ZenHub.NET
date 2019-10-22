@@ -1,14 +1,8 @@
 using NUnit.Framework;
-using WireMock.Server;
-using WireMock.Matchers.Request;
-using WireMock.ResponseBuilders;
-using WireMock.RequestBuilders;
-using ZenHub;
-using ZenHub.Pipeline;
 using Octokit;
-using System.Linq;
 using System;
-using RestEase;
+using System.Linq;
+using ZenHub.Pipeline;
 using ZenHub.Tests.Helpers;
 
 namespace ZenHub.Tests

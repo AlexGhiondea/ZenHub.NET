@@ -1,11 +1,4 @@
-﻿using Octokit;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using WireMock.RequestBuilders;
-using WireMock.ResponseBuilders;
+﻿using System.IO;
 using WireMock.Server;
 
 namespace ZenHub.Tests

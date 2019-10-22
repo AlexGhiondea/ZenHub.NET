@@ -1,5 +1,4 @@
 ﻿using Azure;
-using Azure.Core.Http;
 using Azure.Core.Pipeline;
 using System;
 using System.IO;

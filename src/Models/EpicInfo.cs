@@ -6,7 +6,7 @@ namespace ZenHub.Models
     {
         [JsonPropertyName("issue_number")]
         public int IssueNumber { get; set; }
-   
+
         [JsonPropertyName("repo_id")]
         public long RepositoryId { get; set; }
 
