@@ -12,7 +12,7 @@ namespace ZenHub.Pipeline
             ProcessNext(message, pipeline);
             if (message.ResponseClassifier.IsErrorResponse(message))
             {
-                throw new RequestFailedException(message.ToString());
+                throw new RequestFailedException(message.Response.Status, message.ToString());
             }
         }
 
@@ -21,7 +21,7 @@ namespace ZenHub.Pipeline
             await ProcessNextAsync(message, pipeline);
             if (message.ResponseClassifier.IsErrorResponse(message))
             {
-                throw new RequestFailedException(message.ToString());
+                throw new RequestFailedException(message.Response.Status, message.ToString());
             }
         }
     }

@@ -1,0 +1,45 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "ExactMatcher",
+          "Pattern": "/p1/repositories/1/epics/2/update_issues"
+        }
+      ]
+    },
+    "Methods": [
+      "post"
+    ],
+    "Body": {
+      "Matcher": {
+        "Name": "ExactMatcher",
+        "Pattern": "{\"add_issues\":[{\"repo_id\":2,\"issue_number\":1},{\"repo_id\":2,\"issue_number\":2}],\"remove_issues\":[]}"
+      }
+    }
+  },
+  "Response": {
+    "StatusCode": 200,
+    "BodyAsJson": {
+      "remove_issues": [
+        {
+          "repo_id": 13550592,
+          "issue_number": 3
+        }
+      ],
+      "add_issues": [
+        {
+          "repo_id": 13550592,
+          "issue_number": 2
+        },
+        {
+          "repo_id": 13550592,
+          "issue_number": 1
+        }
+      ]
+    },
+    "Headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
