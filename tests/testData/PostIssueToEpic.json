@@ -6,15 +6,17 @@
           "Name": "ExactMatcher",
           "Pattern": "/p1/repositories/1/epics/2/update_issues"
         }
-      ],
-      "BodyAsJson": {
-        "remove_issues": [ ],
-        "add_issues": [ ]
-      }
+      ]
     },
     "Methods": [
       "post"
-    ]
+    ],
+    "Body": {
+      "Matcher": {
+        "Name": "ExactMatcher",
+        "Pattern": "{\"add_issues\":[],\"remove_issues\":[]}"
+      }
+    }
   },
   "Response": {
     "StatusCode": 200,

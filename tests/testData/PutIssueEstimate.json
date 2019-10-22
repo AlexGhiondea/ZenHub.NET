@@ -10,7 +10,13 @@
     },
     "Methods": [
       "put"
-    ]
+    ],
+    "Body": {
+      "Matcher": {
+        "Name": "ExactMatcher",
+        "Pattern": "{\"estimate\":15}"
+      }
+    }
   },
   "Response": {
     "StatusCode": 200,

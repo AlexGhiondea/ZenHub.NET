@@ -11,17 +11,11 @@
     "Methods": [
       "post"
     ],
-    "BodyAsJson": {
-      "issues": [
-        {
-          "repo_id": 13550592,
-          "issue_number": 3
-        },
-        {
-          "repo_id": 13550592,
-          "issue_number": 1
-        }
-      ]
+    "Body": {
+      "Matcher": {
+        "Name": "ExactMatcher",
+        "Pattern": "{\"issues\":[{\"repo_id\":13550592,\"issue_number\":3},{\"repo_id\":13550592,\"issue_number\":1}]}"
+      }
     }
   },
   "Response": {
