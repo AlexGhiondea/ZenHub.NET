@@ -13,7 +13,7 @@ namespace ZenHub.Tests
             Server = FluentMockServer.Start();
         }
 
-        public const long repoId = 1;
+        public const long repositoryId = 1;
         public const int issueNumber = 2;
         public const int milestoneNumber = 1;
         public const string ZenHubWorkspaceId = "dummyWorkspace";
