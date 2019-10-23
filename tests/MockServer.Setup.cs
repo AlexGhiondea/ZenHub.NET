@@ -1,11 +1,4 @@
-﻿using Octokit;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using WireMock.RequestBuilders;
-using WireMock.ResponseBuilders;
+﻿using System.IO;
 using WireMock.Server;
 
 namespace ZenHub.Tests
@@ -20,7 +13,7 @@ namespace ZenHub.Tests
             Server = FluentMockServer.Start();
         }
 
-        public const long repoId = 1;
+        public const long repositoryId = 1;
         public const int issueNumber = 2;
         public const int milestoneNumber = 1;
         public const string ZenHubWorkspaceId = "dummyWorkspace";

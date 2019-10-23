@@ -14,7 +14,7 @@
     "Body": {
       "Matcher": {
         "Name": "ExactMatcher",
-        "Pattern": "{\"title\":\"\",\"description\":\"\",\"start_date\":\"2019-11-19T08:00:00Z\",\"desired_end_date\":\"2019-11-19T08:00:00Z\",\"repositories\":[]}"
+        "Pattern": "{\"title\":\"\",\"description\":\"\",\"start_date\":\"2019-11-19T08:00:00Z\",\"desired_end_date\":\"2019-11-19T08:00:00Z\",\"repositories\":[1]}"
       }
     }
   },

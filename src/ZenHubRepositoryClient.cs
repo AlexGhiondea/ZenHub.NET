@@ -4,7 +4,6 @@ using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<Workspace[]>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p2/repositories/{_repositoryId}/workspaces",
+                    $"{Options.EndPoint}/p2/repositories/{_repositoryId}/workspaces",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -43,7 +42,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<ZenHubBoard>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/board",
+                    $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/board",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -55,7 +54,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<ZenHubBoard>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/board",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/board",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -65,9 +64,14 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<StartDate>> GetMilestoneStartAsync(Milestone milestone, CancellationToken cancellationToken = default)
         {
+            if (milestone == null)
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
             return await MakeRequestAsync<StartDate>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -79,6 +83,11 @@ namespace ZenHub
         /// <param name="startDate">The start date for the milestone</param>
         public async Task<Response<StartDate>> SetMilestoneStartAsync(Milestone milestone, DateTime startDate, CancellationToken cancellationToken = default)
         {
+            if (milestone == null)
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
             var contentBody = new
             {
                 start_date = startDate.ToUniversalTime()
@@ -86,7 +95,7 @@ namespace ZenHub
 
             return await MakeRequestAsync<StartDate>(
                     RequestMethod.Post,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -99,7 +108,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<RepoDependencies>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/dependencies",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/dependencies",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -111,7 +120,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<EpicList>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/epics",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -134,7 +143,7 @@ namespace ZenHub
 
             return await MakeRequestAsync<ReleaseReport>(
                     RequestMethod.Post,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/reports/release",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/reports/release",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -147,7 +156,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<ReleaseReport[]>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/repositories/{_repositoryId}/reports/releases",
+                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/reports/releases",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }

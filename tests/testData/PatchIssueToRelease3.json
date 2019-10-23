@@ -4,22 +4,31 @@
       "Matchers": [
         {
           "Name": "ExactMatcher",
-          "Pattern": "/p1/repositories/1/issues/2/convert_to_epic"
+          "Pattern": "/p1/reports/release/dummyRelease/issues"
         }
       ]
     },
     "Methods": [
-      "post"
+      "patch"
     ],
     "Body": {
       "Matcher": {
         "Name": "ExactMatcher",
-        "Pattern": "{\"issues\":[{\"repo_id\":13550592,\"issue_number\":3},{\"repo_id\":13550592,\"issue_number\":1}]}"
+        "Pattern": "{\"add_issues\":[{\"repo_id\":2,\"issue_number\":1}],\"remove_issues\":[]}"
       }
     }
   },
   "Response": {
     "StatusCode": 200,
+    "BodyAsJson": {
+      "added": [
+        {
+          "repo_id": 103707262,
+          "issue_number": 3
+        }
+      ],
+      "removed": []
+    },
     "Headers": {
       "Content-Type": "application/json"
     }

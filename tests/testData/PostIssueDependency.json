@@ -11,14 +11,11 @@
     "Methods": [
       "post"
     ],
-    "BodyAsJson": {
-      "blocking": {
-        "repo_id": 1,
-        "issue_number": 2
-      },
-      "blocked": {
-        "repo_id": 1,
-        "issue_number": 2
+
+    "Body": {
+      "Matcher": {
+        "Name": "ExactMatcher",
+        "Pattern": "{\"blocking\":{\"repo_id\":1,\"issue_number\":2},\"blocked\":{\"repo_id\":1,\"issue_number\":2}}"
       }
     }
   },

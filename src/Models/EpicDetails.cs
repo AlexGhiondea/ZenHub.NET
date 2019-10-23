@@ -11,10 +11,10 @@ namespace ZenHub.Models
         public EstimateValue Estimate { get; set; }
 
         [JsonPropertyName("pipeline")]
-        public Pipeline Pipeline { get; set; }
+        public ZenHubPipeline Pipeline { get; set; }
 
         [JsonPropertyName("pipelines")]
-        public Pipeline[] Pipelines { get; set; }
+        public ZenHubPipeline[] Pipelines { get; set; }
 
         [JsonPropertyName("issues")]
         public IssueDetails[] Issues { get; set; }

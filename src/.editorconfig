@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = none
+
+# CA1819: ZenHubPipeline names is similar to Pipeline
+dotnet_diagnostic.CA1724.severity = none
+
+# CA1056: Uri properties should not be strings
+dotnet_diagnostic.CA1056.severity = none

@@ -11,7 +11,12 @@
     "Methods": [
       "post"
     ],
-    "BodyAsJson": { "issues": [] }
+    "Body": {
+      "Matcher": {
+        "Name": "ExactMatcher",
+        "Pattern": "{\"issues\":[]}"
+      }
+    }
   },
   "Response": {
     "StatusCode": 200,

@@ -4,7 +4,6 @@ using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<ReleaseReport>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/reports/release/{_releaseId}",
+                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -51,7 +50,7 @@ namespace ZenHub
 
             return await MakeRequestAsync<ReleaseReport>(
                     RequestMethod.Patch,
-                    $"{_options.EndPoint}/p1/reports/release/{_releaseId}",
+                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -63,9 +62,14 @@ namespace ZenHub
         /// <param name="repositoryToAdd">The repository to add to the report</param>
         public async Task<Response> AddRepositoryAsync(Repository repositoryToAdd, CancellationToken cancellationToken = default)
         {
+            if (repositoryToAdd == null)
+            {
+                throw new ArgumentNullException(nameof(repositoryToAdd));
+            }
+
             return await MakeRequestAsync(
                     RequestMethod.Post,
-                    $"{_options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToAdd.Id}",
+                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToAdd.Id}",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -76,9 +80,14 @@ namespace ZenHub
         /// <param name="repositoryToAdd">The repository to remove from the report</param>
         public async Task<Response> RemoveRepositoryAsync(Repository repositoryToRemove, CancellationToken cancellationToken = default)
         {
+            if (repositoryToRemove == null)
+            {
+                throw new ArgumentNullException(nameof(repositoryToRemove));
+            }
+
             return await MakeRequestAsync(
                     RequestMethod.Delete,
-                    $"{_options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToRemove.Id}",
+                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToRemove.Id}",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -90,7 +99,7 @@ namespace ZenHub
         {
             return await MakeRequestAsync<IssueDetails[]>(
                     RequestMethod.Get,
-                    $"{_options.EndPoint}/p1/reports/release/{_releaseId}/issues",
+                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/issues",
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -101,7 +110,8 @@ namespace ZenHub
         /// <param name="issuesToAdd">The issue to add to the release</param>
         public async Task<Response> AddIssuesAsync(IEnumerable<Issue> issuesToAdd, CancellationToken cancellationToken = default)
         {
-            return await ChangeIssuesToReleaseReportAsync(issuesToAdd, Enumerable.Empty<Issue>(), cancellationToken);
+            return await ChangeIssuesToReleaseReportAsync(issuesToAdd, Enumerable.Empty<Issue>(), cancellationToken)
+                         .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -110,7 +120,8 @@ namespace ZenHub
         /// <param name="issuesToRemove">The issue to remove from the release</param>
         public async Task<Response> RemoveIssuesAsync(IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
         {
-            return await ChangeIssuesToReleaseReportAsync(Enumerable.Empty<Issue>(), issuesToRemove, cancellationToken);
+            return await ChangeIssuesToReleaseReportAsync(Enumerable.Empty<Issue>(), issuesToRemove, cancellationToken)
+                        .ConfigureAwait(false);
         }
 
         private async Task<Response> ChangeIssuesToReleaseReportAsync(IEnumerable<Issue> issuesToAdd, IEnumerable<Issue> issuesToRemove, CancellationToken cancellationToken = default)
@@ -123,7 +134,7 @@ namespace ZenHub
 
             return await MakeRequestAsync(
                     RequestMethod.Patch,
-                    $"{_options.EndPoint}/p1/reports/release/{_releaseId}/issues",
+                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/issues",
                     JsonSerializer.Serialize(contentBody),
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);

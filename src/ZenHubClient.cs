@@ -1,5 +1,6 @@
 using Azure.Core.Pipeline;
 using Octokit;
+using System;
 using ZenHub.Pipeline;
 
 namespace ZenHub
@@ -26,7 +27,12 @@ namespace ZenHub
         /// <returns>A client that provides operations on a repository</returns>
         public ZenHubRepositoryClient GetRepositoryClient(Repository repository)
         {
-            return new ZenHubRepositoryClient(repository.Id, _pipeline, _options);
+            if (repository == null)
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+
+            return new ZenHubRepositoryClient(repository.Id, Pipeline, Options);
         }
 
         /// <summary>
@@ -36,7 +42,7 @@ namespace ZenHub
         /// <returns>A client that provides operations on a repository</returns>
         public ZenHubRepositoryClient GetRepositoryClient(long repositoryId)
         {
-            return new ZenHubRepositoryClient(repositoryId, _pipeline, _options);
+            return new ZenHubRepositoryClient(repositoryId, Pipeline, Options);
         }
 
         /// <summary>
@@ -46,6 +52,11 @@ namespace ZenHub
         /// <returns>A client that provides operations on an Issue</returns>
         public ZenHubIssueClient GetIssueClient(Issue issue)
         {
+            if (issue == null)
+            {
+                throw new ArgumentNullException(nameof(issue));
+            }
+
             return GetIssueClient(issue.Repository.Id, issue.Number);
         }
 
@@ -57,7 +68,7 @@ namespace ZenHub
         /// <returns>A client that provides operations on an Issue</returns>
         public ZenHubIssueClient GetIssueClient(long repoId, int issueNumber)
         {
-            return new ZenHubIssueClient(repoId, issueNumber, _pipeline, _options);
+            return new ZenHubIssueClient(repoId, issueNumber, Pipeline, Options);
         }
 
         /// <summary>
@@ -67,6 +78,11 @@ namespace ZenHub
         /// <returns>A client that provides operations on an Epic</returns>
         public ZenHubEpicClient GetEpicClient(Issue epic)
         {
+            if (epic == null)
+            {
+                throw new ArgumentNullException(nameof(epic));
+            }
+
             return GetEpicClient(epic.Repository.Id, epic.Number);
         }
 
@@ -78,7 +94,7 @@ namespace ZenHub
         /// <returns>A client that provides operations on an Epic</returns>
         public ZenHubEpicClient GetEpicClient(long repoId, int epicNumber)
         {
-            return new ZenHubEpicClient(repoId, epicNumber, _pipeline, _options);
+            return new ZenHubEpicClient(repoId, epicNumber, Pipeline, Options);
         }
 
         /// <summary>
@@ -88,7 +104,12 @@ namespace ZenHub
         /// <returns>A client that provides operations on an Release</returns>
         public ZenHubReleaseClient GetReleaseClient(string releaseId)
         {
-            return new ZenHubReleaseClient(releaseId, _pipeline, _options);
+            if (string.IsNullOrEmpty(releaseId))
+            {
+                throw new ArgumentNullException(nameof(releaseId));
+            }
+
+            return new ZenHubReleaseClient(releaseId, Pipeline, Options);
         }
     }
 }

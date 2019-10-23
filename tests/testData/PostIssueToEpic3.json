@@ -14,7 +14,7 @@
     "Body": {
       "Matcher": {
         "Name": "ExactMatcher",
-        "Pattern": "{\"add_issues\":[],\"remove_issues\":[]}"
+        "Pattern": "{\"add_issues\":[{\"repo_id\":2,\"issue_number\":1},{\"repo_id\":2,\"issue_number\":2}],\"remove_issues\":[]}"
       }
     }
   },
