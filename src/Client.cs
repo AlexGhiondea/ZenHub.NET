@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using System;
 using System.IO;
@@ -41,7 +42,7 @@ namespace ZenHub
 
             if (!string.IsNullOrEmpty(jsonBody))
             {
-                request.Content = HttpPipelineRequestContent.Create(Encoding.UTF8.GetBytes(jsonBody));
+                request.Content = RequestContent.Create(Encoding.UTF8.GetBytes(jsonBody));
                 request.Headers.Add("Content-Type", "application/json");
             }
 
