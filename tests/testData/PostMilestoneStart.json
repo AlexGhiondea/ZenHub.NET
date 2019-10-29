@@ -10,13 +10,7 @@
     },
     "Methods": [
       "post"
-    ],
-    "Body": {
-      "Matcher": {
-        "Name": "ExactMatcher",
-        "Pattern": "{\"start_date\":\"2019-11-01T07:00:00Z\"}"
-      }
-    }
+    ]
   },
   "Response": {
     "StatusCode": 200,
