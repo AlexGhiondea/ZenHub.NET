@@ -30,10 +30,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<IssueDetails>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<IssueDetails>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<IssueDetails>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -42,10 +39,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<Models.IssueEvent[]>> GetEventsAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<Models.IssueEvent[]>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/events",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<Models.IssueEvent[]>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/events", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -60,11 +54,7 @@ namespace ZenHub
                 estimate = estimate
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Put,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/estimate",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Put, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/estimate", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -82,11 +72,7 @@ namespace ZenHub
                 position = position
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/issues/{_issueNumber}/moves",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Post, $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/issues/{_issueNumber}/moves", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
         /// <summary>
@@ -102,11 +88,7 @@ namespace ZenHub
                 position = position
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/moves",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Post, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/moves", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -126,11 +108,7 @@ namespace ZenHub
                 issues = issuesToAddToEpic.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Number }).ToArray(),
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/convert_to_epic",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Post, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/issues/{_issueNumber}/convert_to_epic", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -159,11 +137,7 @@ namespace ZenHub
                 }
             };
 
-            return await MakeRequestAsync<IssueDependency>(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/dependencies",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<IssueDependency>(RequestMethod.Post, $"{Options.EndPoint}/p1/dependencies", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -192,11 +166,7 @@ namespace ZenHub
                 }
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Delete,
-                    $"{Options.EndPoint}/p1/dependencies",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Delete, $"{Options.EndPoint}/p1/dependencies", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
     }

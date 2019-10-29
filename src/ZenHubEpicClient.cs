@@ -29,10 +29,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<EpicDetails>> GetDetailsAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<EpicDetails>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<EpicDetails>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -103,10 +100,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response> ConvertToIssueAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/convert_to_issue",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Post, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/convert_to_issue", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -118,11 +112,7 @@ namespace ZenHub
                 remove_issues = issuesToRemove.Select(x => new { repo_id = x.repoId, issue_number = x.issueNumber }).ToArray()
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/update_issues",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Post, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics/{_epicNumber}/update_issues", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
     }
