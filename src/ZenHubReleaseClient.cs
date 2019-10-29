@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using Octokit;
 using System;
@@ -27,10 +28,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<ReleaseReport>> GetReportAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<ReleaseReport>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<ReleaseReport>(RequestMethod.Get, $"{Options.EndPoint}/p1/reports/release/{_releaseId}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -48,11 +46,7 @@ namespace ZenHub
                 state = State
             };
 
-            return await MakeRequestAsync<ReleaseReport>(
-                    RequestMethod.Patch,
-                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<ReleaseReport>(RequestMethod.Patch, $"{Options.EndPoint}/p1/reports/release/{_releaseId}", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -67,10 +61,7 @@ namespace ZenHub
                 throw new ArgumentNullException(nameof(repositoryToAdd));
             }
 
-            return await MakeRequestAsync(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToAdd.Id}",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Post, $"{Options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToAdd.Id}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -85,10 +76,7 @@ namespace ZenHub
                 throw new ArgumentNullException(nameof(repositoryToRemove));
             }
 
-            return await MakeRequestAsync(
-                    RequestMethod.Delete,
-                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToRemove.Id}",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Delete, $"{Options.EndPoint}/p1/reports/release/{_releaseId}/repository/{repositoryToRemove.Id}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -97,10 +85,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<IssueDetails[]>> GetIssuesAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<IssueDetails[]>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/issues",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<IssueDetails[]>(RequestMethod.Get, $"{Options.EndPoint}/p1/reports/release/{_releaseId}/issues", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -132,11 +117,7 @@ namespace ZenHub
                 remove_issues = issuesToRemove.Select(x => new { repo_id = x.Repository.Id, issue_number = x.Number }).ToArray()
             };
 
-            return await MakeRequestAsync(
-                    RequestMethod.Patch,
-                    $"{Options.EndPoint}/p1/reports/release/{_releaseId}/issues",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync(RequestMethod.Patch, $"{Options.EndPoint}/p1/reports/release/{_releaseId}/issues", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
     }

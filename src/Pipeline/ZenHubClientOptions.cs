@@ -1,4 +1,4 @@
-using Azure.Core.Pipeline;
+using Azure.Core;
 
 namespace ZenHub.Pipeline
 {

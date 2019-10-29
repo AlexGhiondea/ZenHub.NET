@@ -387,7 +387,7 @@ namespace ZenHub.Tests
         public void SetMilestoneStart1()
         {
             long repoId = MockServer.repositoryId;
-            DateTime startDate = new DateTime(2019, 11, 1);
+            DateTime startDate = DateTime.Parse("2019-11-01T07:00:00Z");
             var result = _zenhubClient.GetRepositoryClient(new Repository(repoId)).SetMilestoneStartAsync(new Milestone(MockServer.milestoneNumber), startDate).GetAwaiter().GetResult();
 
             Assert.AreEqual(startDate.ToUniversalTime(), (DateTime)result.Value.Start.ToUniversalTime());
@@ -414,7 +414,7 @@ namespace ZenHub.Tests
         [Test]
         public void CreateReleaseReport1()
         {
-            var result = _zenhubClient.GetRepositoryClient(new Repository(MockServer.repositoryId)).CreateReleaseReportAsync("", "", new DateTime(2019, 11, 19), new DateTime(2019, 11, 19), Enumerable.Empty<Repository>()).GetAwaiter().GetResult();
+            var result = _zenhubClient.GetRepositoryClient(new Repository(MockServer.repositoryId)).CreateReleaseReportAsync("", "", DateTime.Parse("2019-11-19T08:00:00Z"), DateTime.Parse("2019-11-19T08:00:00Z"), Enumerable.Empty<Repository>()).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
             Assert.AreEqual("59dff4f508399a35a276a1ea", result.Value.ReleaseId);
@@ -423,7 +423,7 @@ namespace ZenHub.Tests
         [Test]
         public void CreateReleaseReport2()
         {
-            var result = _zenhubClient.GetRepositoryClient(new Repository(MockServer.repositoryId)).CreateReleaseReportAsync("", "", new DateTime(2019, 11, 19), new DateTime(2019, 11, 19), new Repository[] { new Repository(MockServer.repositoryId)}).GetAwaiter().GetResult();
+            var result = _zenhubClient.GetRepositoryClient(new Repository(MockServer.repositoryId)).CreateReleaseReportAsync("", "", DateTime.Parse("2019-11-19T08:00:00Z"), DateTime.Parse("2019-11-19T08:00:00Z"), new Repository[] { new Repository(MockServer.repositoryId)}).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
             Assert.AreEqual("59dff4f508399a35a276a1ea", result.Value.ReleaseId);

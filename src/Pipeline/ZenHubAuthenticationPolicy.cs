@@ -1,3 +1,4 @@
+using Azure.Core;
 using Azure.Core.Pipeline;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace ZenHub.Pipeline
             _authToken = authToken;
         }
 
-        public override void Process(HttpPipelineMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
+        public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
 #pragma warning disable CA1062 // Validate arguments of public methods
             message.Request.Headers.Add("X-Authentication-Token", _authToken);
@@ -20,7 +21,7 @@ namespace ZenHub.Pipeline
             ProcessNext(message, pipeline);
         }
 
-        public override async ValueTask ProcessAsync(HttpPipelineMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
+        public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
 #pragma warning disable CA1062 // Validate arguments of public methods
             message.Request.Headers.Add("X-Authentication-Token", _authToken);

@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using Octokit;
 using System;
@@ -27,10 +28,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<Workspace[]>> GetWorkspacesAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<Workspace[]>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p2/repositories/{_repositoryId}/workspaces",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<Workspace[]>(RequestMethod.Get, $"{Options.EndPoint}/p2/repositories/{_repositoryId}/workspaces", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -40,10 +38,7 @@ namespace ZenHub
         /// <param name="ZenHubWorkspaceId">The workspace id to use</param>
         public async Task<Response<ZenHubBoard>> GetZenHubBoardAsync(string ZenHubWorkspaceId, CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<ZenHubBoard>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/board",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<ZenHubBoard>(RequestMethod.Get, $"{Options.EndPoint}/p2/workspaces/{ZenHubWorkspaceId}/repositories/{_repositoryId}/board", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -52,10 +47,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<ZenHubBoard>> GetOldestZenHubBoardAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<ZenHubBoard>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/board",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<ZenHubBoard>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/board", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -69,10 +61,7 @@ namespace ZenHub
                 throw new ArgumentNullException(nameof(milestone));
             }
 
-            return await MakeRequestAsync<StartDate>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<StartDate>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -93,11 +82,7 @@ namespace ZenHub
                 start_date = startDate.ToUniversalTime()
             };
 
-            return await MakeRequestAsync<StartDate>(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<StartDate>(RequestMethod.Post, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/milestones/{milestone.Number}/start_date", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -106,10 +91,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<RepoDependencies>> GetDependenciesAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<RepoDependencies>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/dependencies",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<RepoDependencies>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/dependencies", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -118,10 +100,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<EpicList>> GetEpicsAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<EpicList>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<EpicList>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/epics", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -141,11 +120,7 @@ namespace ZenHub
                 repositories = repos
             };
 
-            return await MakeRequestAsync<ReleaseReport>(
-                    RequestMethod.Post,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/reports/release",
-                    JsonSerializer.Serialize(contentBody),
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<ReleaseReport>(RequestMethod.Post, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/reports/release", JsonSerializer.Serialize(contentBody), cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -154,10 +129,7 @@ namespace ZenHub
         /// </summary>
         public async Task<Response<ReleaseReport[]>> GetReleaseReportsAsync(CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<ReleaseReport[]>(
-                    RequestMethod.Get,
-                    $"{Options.EndPoint}/p1/repositories/{_repositoryId}/reports/releases",
-                    cancellationToken: cancellationToken)
+            return await MakeRequestAsync<ReleaseReport[]>(RequestMethod.Get, $"{Options.EndPoint}/p1/repositories/{_repositoryId}/reports/releases", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
     }
