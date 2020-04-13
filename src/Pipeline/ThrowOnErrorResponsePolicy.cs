@@ -11,11 +11,7 @@ namespace ZenHub.Pipeline
     {
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-            ProcessNext(message, pipeline);
-            if (message.ResponseClassifier.IsErrorResponse(message))
-            {
-                throw new RequestFailedException(message.Response.Status, message.ToString());
-            }
+            // no sync code.
         }
 
         public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)

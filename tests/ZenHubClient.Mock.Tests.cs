@@ -1,8 +1,10 @@
+using Azure;
 using NUnit.Framework;
 using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZenHub.Pipeline;
 using ZenHub.Tests.Helpers;
 
@@ -223,7 +225,7 @@ namespace ZenHub.Tests
         {
             var zenHubReleaseId = MockServer.ZenHubReleaseId;
 
-            var response = _zenhubClient.GetReleaseClient(zenHubReleaseId).RemoveIssuesAsync(new Issue[] { ObjectCreator.CreateIssue(1, 2) } ).GetAwaiter().GetResult();
+            var response = _zenhubClient.GetReleaseClient(zenHubReleaseId).RemoveIssuesAsync(new Issue[] { ObjectCreator.CreateIssue(1, 2) }).GetAwaiter().GetResult();
             Assert.AreEqual(200, response.Status);
         }
 
@@ -265,6 +267,18 @@ namespace ZenHub.Tests
 
             var response = _zenhubClient.GetEpicClient(repoId, issueNumber)
                 .RemoveIssuesAsync(new[] { ObjectCreator.CreateIssue(1, 2), ObjectCreator.CreateIssue(2, 2) })
+                .GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
+        }
+
+        [Test]
+        public void RemoveIssueFromEpic5()
+        {
+            long repoId = MockServer.repositoryId;
+            int issueNumber = MockServer.issueNumber;
+
+            var response = _zenhubClient.GetEpicClient(repoId, issueNumber)
+                .RemoveIssuesAsync((IEnumerable<Issue>)null)
                 .GetAwaiter().GetResult();
             Assert.AreEqual(200, response.Status);
         }
@@ -423,7 +437,7 @@ namespace ZenHub.Tests
         [Test]
         public void CreateReleaseReport2()
         {
-            var result = _zenhubClient.GetRepositoryClient(new Repository(MockServer.repositoryId)).CreateReleaseReportAsync("", "", DateTime.Parse("2019-11-19T08:00:00Z"), DateTime.Parse("2019-11-19T08:00:00Z"), new Repository[] { new Repository(MockServer.repositoryId)}).GetAwaiter().GetResult();
+            var result = _zenhubClient.GetRepositoryClient(new Repository(MockServer.repositoryId)).CreateReleaseReportAsync("", "", DateTime.Parse("2019-11-19T08:00:00Z"), DateTime.Parse("2019-11-19T08:00:00Z"), new Repository[] { new Repository(MockServer.repositoryId) }).GetAwaiter().GetResult();
 
             Assert.NotNull(result);
             Assert.AreEqual("59dff4f508399a35a276a1ea", result.Value.ReleaseId);
@@ -441,6 +455,13 @@ namespace ZenHub.Tests
         {
             var response = _zenhubClient.GetReleaseClient(MockServer.ZenHubReleaseId).RemoveRepositoryAsync(new Repository(MockServer.repositoryId)).GetAwaiter().GetResult();
             Assert.AreEqual(204, response.Status);
+        }
+
+        [Test]
+        public void GetIssueDataAsyncTest_404()
+        {
+            var exception = Assert.ThrowsAsync<RequestFailedException>(async () =>  await _zenhubClient.GetReleaseClient("error_" + MockServer.ZenHubReleaseId).RemoveRepositoryAsync(new Repository(MockServer.repositoryId + 1)));
+            Assert.AreEqual(404, exception.Status);
         }
     }
 }
