@@ -15,10 +15,7 @@ namespace ZenHub.Pipeline
 
         public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-#pragma warning disable CA1062 // Validate arguments of public methods
-            message.Request.Headers.Add("X-Authentication-Token", _authToken);
-#pragma warning restore CA1062 // Validate arguments of public methods
-            ProcessNext(message, pipeline);
+            // no sync code.
         }
 
         public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
