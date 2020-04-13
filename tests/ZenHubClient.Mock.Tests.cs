@@ -272,6 +272,18 @@ namespace ZenHub.Tests
         }
 
         [Test]
+        public void RemoveIssueFromEpic5()
+        {
+            long repoId = MockServer.repositoryId;
+            int issueNumber = MockServer.issueNumber;
+
+            var response = _zenhubClient.GetEpicClient(repoId, issueNumber)
+                .RemoveIssuesAsync((IEnumerable<Issue>)null)
+                .GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
+        }
+
+        [Test]
         public void AddIssueToEpic1()
         {
             long repoId = MockServer.repositoryId;
