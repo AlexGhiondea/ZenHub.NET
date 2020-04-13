@@ -16,7 +16,7 @@
     "StatusCode": 200,
     "BodyAsJson": {
       "total_epic_estimates": { "value": 60 },
-      "estimate": { "value": 10 },
+      "estimate": { "value": 0.5 },
       "pipeline": {
         "workspace_id": "5d0a7a9741fd098f6b7f58ac",
         "name": "Backlog",
