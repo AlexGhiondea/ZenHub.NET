@@ -4,7 +4,7 @@ This is a .NET library that makes REST calls to the ZenHub API. More information
 
 [![NuGet version](https://img.shields.io/nuget/v/zenhub.net.svg?style=flat)](https://www.nuget.org/packages/ZenHub.Net/)
 [![Nuget downloads](https://img.shields.io/nuget/dt/zenhub.net.svg?style=flat)](https://www.nuget.org/packages/zenhub.net/)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/AlexGhiondea/zenhub.net?branch=master&svg=true)](https://ci.appveyor.com/project/AlexGhiondea/zenhub.net)
+![Build And Test](https://github.com/AlexGhiondea/ZenHub.NET/workflows/Build%20And%20Test/badge.svg)
 [![codecov](https://codecov.io/gh/AlexGhiondea/zenhub.net/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexGhiondea/zenhub.net)
 [![MIT License](https://img.shields.io/github/license/AlexGhiondea/ZenHub.net.svg)](https://github.com/AlexGhiondea/zenhub.net/blob/master/LICENSE)
 [![Code Factor](https://www.codefactor.io/repository/github/alexghiondea/zenhub.net/badge)](https://www.codefactor.io/repository/github/alexghiondea/zenhub.net)
