@@ -16,7 +16,7 @@ namespace ZenHub.Pipeline
 
         public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
         {
-            await ProcessNextAsync(message, pipeline);
+            await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
             if (message.ResponseClassifier.IsErrorResponse(message))
             {
                 throw new RequestFailedException(message.Response.Status, message.ToString());

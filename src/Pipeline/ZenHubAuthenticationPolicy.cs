@@ -23,7 +23,7 @@ namespace ZenHub.Pipeline
 #pragma warning disable CA1062 // Validate arguments of public methods
             message.Request.Headers.Add("X-Authentication-Token", _authToken);
 #pragma warning restore CA1062 // Validate arguments of public methods
-            await ProcessNextAsync(message, pipeline);
+            await ProcessNextAsync(message, pipeline).ConfigureAwait(false);
         }
     }
 }
