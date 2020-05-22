@@ -194,6 +194,16 @@ namespace ZenHub.Tests
         }
 
         [Test]
+        public void SetIssueEstimate2()
+        {
+            long repoId = MockServer.repositoryId;
+            int issueNumber = MockServer.issueNumber;
+
+            var response = _zenhubClient.GetIssueClient(repoId, issueNumber).SetEstimateAsync(1.5).GetAwaiter().GetResult();
+            Assert.AreEqual(200, response.Status);
+        }
+
+        [Test]
         public void AddIssueToReleaseReport1()
         {
             var zenHubReleaseId = MockServer.ZenHubReleaseId;

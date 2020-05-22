@@ -49,6 +49,22 @@ namespace ZenHub
         /// <param name="estimate">The value of the estimate</param>
         public async Task<Response> SetEstimateAsync(int estimate, CancellationToken cancellationToken = default)
         {
+            return await SetEstimateInternalAsync(estimate, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Set the estimate on the issue
+        /// </summary>
+        /// <param name="estimate">The value of the estimate</param>
+        public async Task<Response> SetEstimateAsync(double estimate, CancellationToken cancellationToken = default)
+        {
+            return await SetEstimateInternalAsync(estimate, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        private async Task<Response> SetEstimateInternalAsync<T>(T estimate, CancellationToken cancellationToken = default)
+        {
             var contentBody = new
             {
                 estimate = estimate
